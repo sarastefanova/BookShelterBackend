@@ -1,0 +1,209 @@
+POST http://localhost:8080/roles
+Content-Type: application/json
+
+{
+  "role": "admin"
+}
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/x-www-form-urlencoded
+
+userName=Jofka&name=Jovan&surname=Nakov&number=078230568&password=sara555&roles=admin
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+
+###
+
+GET http://localhost:8080/users
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+GET http://localhost:8080/users?userName=SaraS
+
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+DELETE http://localhost:8080/users/SaraD
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+PATCH http://localhost:8080/users/SaraD
+Content-Type: application/x-www-form-urlencoded
+
+name=SaraS&surname=Jovan&number=078230568&password=bla123&roles=user
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+
+POST http://localhost:8080/author
+Content-Type: application/x-www-form-urlencoded
+
+nameAndSurname=Den Braun&shortAuthorBiography=hdaksb ds dasdsasdfggh adusauhd
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+###
+
+PATCH http://localhost:8080/author/3
+Content-Type: application/x-www-form-urlencoded
+
+name=Den&surname=Braun&shortAuthorBiography="hdaksb ds adusauhd"
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+###
+
+DELETE http://localhost:8080/author/3
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/author
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/author/allNames
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+###
+GET http://localhost:8080/author?id=3
+
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+
+
+POST http://localhost:8080/books
+Content-Type: application/x-www-form-urlencoded
+
+name=Kodot&nameAndSurname=Agata Kristi&price=250
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+
+###
+
+POST http://localhost:8080/books/upload
+Content-Type: application/x-www-form-urlencoded
+
+name=Kodot&nameAndSurname=Agata Kristi&price=250&photoBook=slika.png
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+###
+
+PATCH http://localhost:8080/books/4
+Content-Type: application/x-www-form-urlencoded
+
+name=Shepnuvacot&authorName="Sebastijan Ficerk"&price=500
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+###
+
+DELETE http://localhost:8080/books/4
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/books
+Accept: application/json
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/books?id=4
+
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
