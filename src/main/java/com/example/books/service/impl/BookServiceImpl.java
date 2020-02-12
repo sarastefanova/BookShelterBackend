@@ -33,61 +33,40 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<Book> getById(Long id) {
-        return this.bookRepository.findById(id);
+    public Optional<Book> getById(String name) {
+        return this.bookRepository.findById(name);
     }
 
     @Override
     public Book createBook(String name, String nameAndSurname, int price) throws InvalidAuthorsName{
-        Book book=this.bookRepository.checkIfBookExists(name);
-        if(book==null){
+
+
             Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
 
-                book=new Book(name,author,price);
-
-
+               Book book=new Book(name,author,price);
 
                 return this.bookRepository.save(book);
-        }
-        try {
-            throw new BookAlreadyExists("Book with this name already exists");
-        } catch (BookAlreadyExists bookAlreadyExists) {
-            bookAlreadyExists.getMessage();
-        }
-        return null;
-
     }
 
     @Override
     public Book createBookWithImg(String name, String nameAndSurname, int price, byte[] file) throws InvalidAuthorsName, IOException {
-        Book book=this.bookRepository.checkIfBookExists(name);
-        if(book==null){
+
             Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
 
-                book=new Book(name,author,price,file);
+              Book   book=new Book(name,author,price,file);
                 return this.bookRepository.save(book);
-
-        }
-        try {
-            throw new BookAlreadyExists("Book with this name already exists");
-        } catch (BookAlreadyExists bookAlreadyExists) {
-            bookAlreadyExists.getMessage();
-        }
-        return null;
-
     }
 
     @Override
-    public void deleteBook(Long id) {
-        this.bookRepository.deleteById(id);
+    public void deleteBook(String name) {
+        this.bookRepository.deleteById(name);
     }
 
     @Override
-    public Book editBook(Long id, String name, String nameAndSurname, int price) throws InvalidBookId, InvalidAuthorsName {
-        Book updateBook=this.bookRepository.findById(id).orElseThrow(InvalidBookId::new);
+    public Book editBook(String name, String nameAndSurname, int price) throws InvalidBookId, InvalidAuthorsName {
+        Book updateBook=this.bookRepository.findById(name).orElseThrow(InvalidBookId::new);
         Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
 
-            updateBook.setName(name);
             updateBook.setAuthor(author);
             updateBook.setPrice(price);
 

@@ -4,6 +4,7 @@ import com.example.books.model.Book;
 import com.example.books.repository.BookRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +23,8 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Optional<Book> findById(Long id) {
-        return this.bookJpaRepository.findById(id);
+    public Optional<Book> findById(String name) {
+        return this.bookJpaRepository.findById(name);
     }
 
     @Override
@@ -32,8 +33,8 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-            this.bookJpaRepository.deleteById(id);
+    public void deleteById(String name) {
+            this.bookJpaRepository.deleteById(name);
     }
 
     @Override

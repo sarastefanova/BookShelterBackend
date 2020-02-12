@@ -60,17 +60,17 @@ public class RestBookController {
     }
 
 
-    @PatchMapping("/{id}")
-    public Book updateBook(@PathVariable Long id,
-                           @RequestParam(value="name") String name,
+    @PatchMapping("/{name}")
+    public Book updateBook(
+                           @PathVariable(value="name") String name,
                            @RequestParam(value="nameAndSurname") String nameAndSurname,
                            @RequestParam(value="price") int price) throws InvalidAuthorsId, InvalidBookId, InvalidAuthorsName {
-        return this.bookService.editBook(id,name,nameAndSurname,price);
+        return this.bookService.editBook(name,nameAndSurname,price);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteAuthor(@PathVariable Long id){
-        this.bookService.deleteBook(id);
+    @DeleteMapping("/{name}")
+    public void deleteAuthor(@PathVariable String name){
+        this.bookService.deleteBook(name);
     }
 
     @GetMapping
@@ -79,9 +79,9 @@ public class RestBookController {
     }
 
 
-    @GetMapping(params = "id")
-    public Optional<Book> searchByName(@RequestParam Long id){
-        return bookService.getById(id);
+    @GetMapping(params = "name")
+    public Optional<Book> searchByName(@RequestParam String name){
+        return bookService.getById(name);
     }
 
 }

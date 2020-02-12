@@ -8,9 +8,9 @@ import java.util.Optional;
 public interface BookRepository {
 
     List<Book> getAllBooks();
-    Optional<Book> findById(Long id);
+    Optional<Book> findById(String name);
     Book save(Book book);
-    void deleteById(Long id);
+    void deleteById(String name);
 
     Book checkIfBookExists(String name);
 }

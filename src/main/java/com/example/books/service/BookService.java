@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface BookService {
 
     List<Book> listBooks();
-    Optional<Book> getById(Long id);
+    Optional<Book> getById(String name);
     Book createBook(String name, String nameAndSurname, int price) throws InvalidAuthorsName;
     Book createBookWithImg(String name, String nameAndSurname, int price,byte[] file) throws InvalidAuthorsName, IOException;
-    void deleteBook(Long id);
+    void deleteBook(String name);
 
-    Book editBook(Long id,String name, String nameAndSurname, int price) throws InvalidBookId, InvalidAuthorsName;
+    Book editBook(String name, String nameAndSurname, int price) throws InvalidBookId, InvalidAuthorsName;
 }
