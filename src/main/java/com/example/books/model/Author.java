@@ -2,10 +2,7 @@ package com.example.books.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -20,5 +17,12 @@ public class Author {
 
     String shortAuthorBiography;
 
+    @Column(nullable = true)
+    @Lob
+    private byte[] file;
 
+    public Author(String nameAndSurname, String shortAuthorBiography) {
+        this.nameAndSurname = nameAndSurname;
+        this.shortAuthorBiography = shortAuthorBiography;
+    }
 }

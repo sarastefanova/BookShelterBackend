@@ -12,6 +12,7 @@ public interface AuthorService {
     List<Author> listAuthors();
     Optional<Author> getById(String nameAndSurname);
     Author createAuthor(String nameAndSurname, String shortAuthorBiography) throws AuthorAlreadyExists;
+    Author createAuthorImg(String nameAndSurname, String shortAuthorBiography,byte[]file) throws AuthorAlreadyExists;
     void deleteAuthor(String nameAndSurname);
     List<String> listAllNamesOfAuthors();
     Author editAuthor(String nameAndSurname, String shortAuthorBiography) throws InvalidAuthorsId;

@@ -6,6 +6,7 @@ import com.example.books.model.exceptions.BookAlreadyExists;
 import com.example.books.model.exceptions.InvalidAuthorsId;
 import com.example.books.model.exceptions.InvalidAuthorsName;
 import com.example.books.model.exceptions.InvalidBookId;
+import com.example.books.model.paginate.Page;
 import com.example.books.repository.AuthorRepository;
 import com.example.books.repository.BookRepository;
 import com.example.books.service.BookService;
@@ -60,6 +61,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(String name) {
         this.bookRepository.deleteById(name);
+    }
+
+    @Override
+    public Page<Book> getAllBooks(int page, int size) {
+       return this.bookRepository.getAllBooks(page,size);
     }
 
     @Override

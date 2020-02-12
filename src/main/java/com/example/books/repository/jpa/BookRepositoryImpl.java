@@ -1,7 +1,9 @@
 package com.example.books.repository.jpa;
 
 import com.example.books.model.Book;
+import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
@@ -25,6 +27,12 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Optional<Book> findById(String name) {
         return this.bookJpaRepository.findById(name);
+    }
+
+    @Override
+    public Page<Book> getAllBooks(int page, int size) {
+        org.springframework.data.domain.Page<Book> result=this.bookJpaRepository.findAll(PageRequest.of(page, size));
+        return new Page<>(page,result.getTotalPages(),size,result.getContent());
     }
 
     @Override

@@ -41,6 +41,12 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public Author createAuthorImg(String nameAndSurname, String shortAuthorBiography, byte[] file) throws AuthorAlreadyExists {
+        Author  author=new Author(nameAndSurname,shortAuthorBiography,file);
+        return this.authorRepository.save(author);
+    }
+
+    @Override
     public void deleteAuthor(String nameAndSurname) {
             this.authorRepository.deleteAuthor(nameAndSurname);
     }

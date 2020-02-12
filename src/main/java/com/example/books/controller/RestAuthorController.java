@@ -7,7 +7,9 @@ import com.example.books.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +38,20 @@ public class RestAuthorController {
         return null;
     }
 
+
+    @PostMapping(path = "/addAuthor")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Author createAuthor(@RequestParam(value="nameAndSurname") String nameAndSurname,
+                               @RequestParam(value="shortAuthorBiography") String shortAuthorBiography,
+                               @RequestParam(value = "file",required = false) MultipartFile file) {
+
+        try {
+            return this.authorService.createAuthorImg(nameAndSurname,shortAuthorBiography,file.getBytes());
+        } catch (AuthorAlreadyExists | IOException authorAlreadyExists) {
+            authorAlreadyExists.getMessage();
+        }
+        return null;
+    }
 
     @PatchMapping("/{nameAndSurname}")
     public Author updateAuthor(@PathVariable String nameAndSurname,

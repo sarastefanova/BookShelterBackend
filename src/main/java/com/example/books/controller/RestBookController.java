@@ -5,6 +5,7 @@ import com.example.books.model.Book;
 import com.example.books.model.exceptions.InvalidAuthorsId;
 import com.example.books.model.exceptions.InvalidAuthorsName;
 import com.example.books.model.exceptions.InvalidBookId;
+import com.example.books.model.paginate.Page;
 import com.example.books.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -53,12 +54,14 @@ public class RestBookController {
         int priceBook=Integer.parseInt(price);
 
             return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes());
-
-
-
-
     }
 
+
+    @GetMapping
+    public Page<Book> getAllBooks(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                              @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size) {
+        return this.bookService.getAllBooks(page, size);
+    }
 
     @PatchMapping("/{name}")
     public Book updateBook(
@@ -73,10 +76,6 @@ public class RestBookController {
         this.bookService.deleteBook(name);
     }
 
-    @GetMapping
-    public List<Book> getAllAuthors(){
-        return this.bookService.listBooks();
-    }
 
 
     @GetMapping(params = "name")
