@@ -24,6 +24,8 @@ public class Book {
     @Column(nullable = true)
     @Lob
     private byte[] file;
+
+    String shortContentBook;
     public Book(String name, Author author, int price) {
         this.name = name;
         this.author = author;
@@ -31,5 +33,10 @@ public class Book {
 
     }
 
-
+    public Book(String name, Author author, int price, byte[] file) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+        this.file = file;
+    }
 }

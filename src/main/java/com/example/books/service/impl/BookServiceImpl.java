@@ -50,11 +50,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBookWithImg(String name, String nameAndSurname, int price, byte[] file) throws InvalidAuthorsName, IOException {
+    public Book createBookWithImg(String name, String nameAndSurname, int price, byte[] file,String shortContentBook) throws InvalidAuthorsName, IOException {
 
             Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
 
-              Book   book=new Book(name,author,price,file);
+              Book   book=new Book(name,author,price,file,shortContentBook);
                 return this.bookRepository.save(book);
     }
 
@@ -69,13 +69,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book editBook(String name, String nameAndSurname, int price) throws InvalidBookId, InvalidAuthorsName {
+    public Book editBook(String name, String nameAndSurname, int price,String shortContentBook) throws InvalidBookId, InvalidAuthorsName {
         Book updateBook=this.bookRepository.findById(name).orElseThrow(InvalidBookId::new);
         Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
 
             updateBook.setAuthor(author);
             updateBook.setPrice(price);
-
+            updateBook.setFile(updateBook.getFile());
+            updateBook.setShortContentBook(shortContentBook);
             return this.bookRepository.save(updateBook);
 
     }

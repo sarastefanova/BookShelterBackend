@@ -16,8 +16,8 @@ public interface BookService {
     List<Book> listBooks();
     Optional<Book> getById(String name);
     Book createBook(String name, String nameAndSurname, int price) throws InvalidAuthorsName;
-    Book createBookWithImg(String name, String nameAndSurname, int price,byte[] file) throws InvalidAuthorsName, IOException;
+    Book createBookWithImg(String name, String nameAndSurname, int price,byte[] file,String shortContentBook) throws InvalidAuthorsName, IOException;
     void deleteBook(String name);
     Page<Book> getAllBooks(int page, int size);
-    Book editBook(String name, String nameAndSurname, int price) throws InvalidBookId, InvalidAuthorsName;
+    Book editBook(String name, String nameAndSurname, int price,String shortContentBook) throws InvalidBookId, InvalidAuthorsName;
 }

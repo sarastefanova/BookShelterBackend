@@ -48,12 +48,13 @@ public class RestBookController {
     public Book createBookImg(@RequestParam(value="name") String name,
                            @RequestParam(value="nameAndSurname") String nameAndSurname,
                            @RequestParam(value="price") String price,
-                           @RequestParam(value = "file",required = false)MultipartFile file) throws InvalidAuthorsName, IOException {
+                           @RequestParam(value = "file",required = false)MultipartFile file,
+                              @RequestParam(value = "shortContentBook")String shortContentBook) throws InvalidAuthorsName, IOException {
 
 
         int priceBook=Integer.parseInt(price);
 
-            return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes());
+            return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes(),shortContentBook);
     }
 
 
@@ -67,8 +68,9 @@ public class RestBookController {
     public Book updateBook(
                            @PathVariable(value="name") String name,
                            @RequestParam(value="nameAndSurname") String nameAndSurname,
-                           @RequestParam(value="price") int price) throws InvalidAuthorsId, InvalidBookId, InvalidAuthorsName {
-        return this.bookService.editBook(name,nameAndSurname,price);
+                           @RequestParam(value="price") int price,
+                           @RequestParam(value = "shortContentBook")String shortContentBook) throws InvalidAuthorsId, InvalidBookId, InvalidAuthorsName, IOException {
+        return this.bookService.editBook(name,nameAndSurname,price,shortContentBook);
     }
 
     @DeleteMapping("/{name}")

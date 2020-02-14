@@ -197,7 +197,7 @@ client.test("Request executed successfully", function() {
 %}
 
 ###
-GET http://localhost:8080/books?id=4
+GET http://localhost:8080/books?name=Nateraj me
 
 
 > {%
