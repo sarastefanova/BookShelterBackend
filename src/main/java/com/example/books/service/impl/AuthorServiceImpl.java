@@ -1,7 +1,7 @@
 package com.example.books.service.impl;
 
 import com.example.books.model.Author;
-import com.example.books.model.exceptions.AuthorAlreadyExists;
+
 import com.example.books.model.exceptions.InvalidAuthorsId;
 import com.example.books.repository.AuthorRepository;
 import com.example.books.service.AuthorService;
@@ -32,18 +32,21 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author createAuthor(String nameAndSurname, String shortAuthorBiography){
 
-          Author  author=new Author(nameAndSurname,shortAuthorBiography);
+        if((this.authorRepository.findAnotherSameAuthor(nameAndSurname))==null){
+            Author  author=new Author(nameAndSurname,shortAuthorBiography);
             return this.authorRepository.save(author);
-
-
-
+        }
+        else throw new InvalidAuthorsId();
 
     }
 
     @Override
-    public Author createAuthorImg(String nameAndSurname, String shortAuthorBiography, byte[] file) throws AuthorAlreadyExists {
-        Author  author=new Author(nameAndSurname,shortAuthorBiography,file);
-        return this.authorRepository.save(author);
+    public Author createAuthorImg(String nameAndSurname, String shortAuthorBiography, byte[] file)  {
+        if((this.authorRepository.findAnotherSameAuthor(nameAndSurname))==null) {
+            Author author = new Author(nameAndSurname, shortAuthorBiography, file);
+            return this.authorRepository.save(author);
+        }
+        else throw new InvalidAuthorsId();
     }
 
     @Override

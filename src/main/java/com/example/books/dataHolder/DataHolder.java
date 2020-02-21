@@ -23,16 +23,16 @@ public class DataHolder {
 
     @PostConstruct
     public void init(){
-        Roles role=new Roles();
-        role.setRole("admin");
-
-        roles.add(role);
-
-        role=new Roles();
-        role.setRole("user");
-
-        roles.add(role);
-
-        this.rolesRepository.saveAll(roles);
+//        Roles role=new Roles();
+//        role.setRole("admin");
+//
+//        roles.add(role);
+//
+//        role=new Roles();
+//        role.setRole("user");
+//
+//        roles.add(role);
+//
+//        this.rolesRepository.saveAll(roles);
     }
 }

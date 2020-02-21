@@ -54,7 +54,7 @@ public class RestBookController {
 
         int priceBook=Integer.parseInt(price);
 
-            return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes(),shortContentBook);
+                return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes(),shortContentBook);
     }
 
 
@@ -83,6 +83,17 @@ public class RestBookController {
     @GetMapping(params = "name")
     public Optional<Book> searchByName(@RequestParam String name){
         return bookService.getById(name);
+    }
+
+    @GetMapping(path = "/searchBook",params = "name")
+    public List<Book> searchBookOrAuthor(@RequestParam String name){
+        return bookService.searchBookOrAuthor(name);
+    }
+
+
+    @GetMapping(path = "/getAllBooksByAuthor/{nameAndSurname}")
+    public List<Book>getAllBookByAuthor(@PathVariable String nameAndSurname){
+        return this.bookService.getAllBookByAuthor(nameAndSurname);
     }
 
 }

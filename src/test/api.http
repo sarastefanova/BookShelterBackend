@@ -126,7 +126,7 @@ client.test("Request executed successfully", function() {
 });
 %}
 ###
-GET http://localhost:8080/author?id=3
+GET http://localhost:8080/author?nameAndSurname=Agata Kristi
 
 
 > {%
@@ -198,6 +198,16 @@ client.test("Request executed successfully", function() {
 
 ###
 GET http://localhost:8080/books?name=Nateraj me
+
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/books/getAllBooksByAuthor/nameAndSurname=Agata Kristi
 
 
 > {%

@@ -14,4 +14,5 @@ public interface AuthorRepository {
 
     List<String> getAllNamesOfAuthors();
     Author checkArturName(String authorName);
+    Long findAnotherSameAuthor(String userName);
 }

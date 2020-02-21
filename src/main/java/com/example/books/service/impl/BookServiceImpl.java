@@ -11,7 +11,6 @@ import com.example.books.repository.AuthorRepository;
 import com.example.books.repository.BookRepository;
 import com.example.books.service.BookService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -53,9 +52,11 @@ public class BookServiceImpl implements BookService {
     public Book createBookWithImg(String name, String nameAndSurname, int price, byte[] file,String shortContentBook) throws InvalidAuthorsName, IOException {
 
             Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
-
-              Book   book=new Book(name,author,price,file,shortContentBook);
+            if((this.bookRepository.findAnotherSameUserName(name))==null){
+                Book   book=new Book(name,author,price,file,shortContentBook);
                 return this.bookRepository.save(book);
+            }
+              else throw new BookAlreadyExists();
     }
 
     @Override
@@ -70,7 +71,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book editBook(String name, String nameAndSurname, int price,String shortContentBook) throws InvalidBookId, InvalidAuthorsName {
-        Book updateBook=this.bookRepository.findById(name).orElseThrow(InvalidBookId::new);
+        Book updateBook=  this.bookRepository.findById(name).orElseThrow(InvalidBookId::new);
         Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
 
             updateBook.setAuthor(author);
@@ -79,6 +80,16 @@ public class BookServiceImpl implements BookService {
             updateBook.setShortContentBook(shortContentBook);
             return this.bookRepository.save(updateBook);
 
+    }
+
+    @Override
+    public List<Book> getAllBookByAuthor(String nameAndSurname) {
+        return this.bookRepository.getAllBookByAuthor(nameAndSurname);
+    }
+
+    @Override
+    public List<Book> searchBookOrAuthor(String name) {
+        return this.bookRepository.searchBookOrAuthor(name);
     }
 
 }

@@ -11,9 +11,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class BooksApplication {
 
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
+
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder(4);
     }
 
     public static void main(String[] args) {

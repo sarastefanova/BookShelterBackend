@@ -4,6 +4,7 @@ import com.example.books.model.Book;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
@@ -46,7 +47,22 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
+    public List<Book> getAllBookByAuthor(String nameAndSurname) {
+        return this.bookJpaRepository.getAllBookByAuthor(nameAndSurname);
+    }
+
+    @Override
     public Book checkIfBookExists(String name) {
         return this.bookJpaRepository.checkIfBookExists(name);
+    }
+
+    @Override
+    public List<Book> searchBookOrAuthor(String name) {
+        return this.bookJpaRepository.findByName(name);
+    }
+
+    @Override
+    public Long findAnotherSameUserName(String userName) {
+        return this.bookJpaRepository.findAnotherSameUserName(userName);
     }
 }

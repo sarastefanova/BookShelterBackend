@@ -1,10 +1,10 @@
 package com.example.books.model.exceptions;
 
-public class BookAlreadyExists extends Exception {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-    public String s;
-    public BookAlreadyExists(String s) {
-        super(s);
-        this.s=s;
-    }
+@ResponseStatus(HttpStatus.CONFLICT)
+public class BookAlreadyExists extends RuntimeException {
+
+
 }

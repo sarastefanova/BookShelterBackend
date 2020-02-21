@@ -7,10 +7,12 @@ import java.util.Optional;
 
 public interface UserRepository {
     List<User> getAllUsers();
-    Optional<User> findById(String userName);
+    Optional<User> findById(Long id);
     User save(User user);
-    void deleteById(String userName);
-
+    void deleteById(Long id);
+    List<String> findByIdList(List<Long>idList);
 
     User findByUserName(String userName);
+
+    Long findAnotherSameUserName(String userName,Long id);
 }

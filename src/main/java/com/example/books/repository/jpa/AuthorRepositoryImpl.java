@@ -46,5 +46,10 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         return this.authorJpaRepository.checkArturName(authorName);
     }
 
+    @Override
+    public Long findAnotherSameAuthor(String userName) {
+        return this.authorJpaRepository.findAnotherSameAuthor(userName);
+    }
+
 
 }

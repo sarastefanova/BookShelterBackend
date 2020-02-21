@@ -16,14 +16,15 @@ public class UserRepositoryImpl implements UserRepository {
         this.userJpaRepository = userJpaRepository;
     }
 
+
     @Override
     public List<User> getAllUsers() {
         return this.userJpaRepository.findAll();
     }
 
     @Override
-    public Optional<User> findById(String userName) {
-        return this.userJpaRepository.findById(userName);
+    public Optional<User> findById(Long id) {
+        return this.userJpaRepository.findById(id);
     }
 
     @Override
@@ -32,15 +33,22 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void deleteById(String userName) {
-        this.userJpaRepository.deleteById(userName);
+    public void deleteById(Long id) {
+        this.userJpaRepository.deleteById(id);
     }
 
+    @Override
+    public List<String> findByIdList(List<Long> idList) {
+        return this.userJpaRepository.findByIdList(idList);
+    }
 
     @Override
     public User findByUserName(String userName) {
         return this.userJpaRepository.findUserByUserName(userName);
     }
 
-
+    @Override
+    public Long findAnotherSameUserName(String userName,Long id) {
+        return this.userJpaRepository.findAnotherSameUserName(userName,id);
+    }
 }

@@ -24,17 +24,22 @@ import java.util.Set;
 public class User implements UserDetails {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
     String userName;
     String name;
     String surname;
     String address;
     String number;
     String password;
-    String passwordConfirm;
+    @Column(nullable = true)
+    @Lob
+    private byte[] file;
 
     //String encryptedPassword;
     String email;
-
+   // private byte[] imageUser;
 
 //    @JsonIgnore
 //    @ManyToMany(cascade = CascadeType.ALL)

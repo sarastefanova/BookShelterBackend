@@ -13,4 +13,7 @@ public interface AuthorJpaRepository extends JpaRepository<Author,String> {
 
     @Query("select a.nameAndSurname from Author a")
     List<String> getAllNamesOfAuthors();
+
+    @Query("select count(a.nameAndSurname) from Author a where lower(a.nameAndSurname) like lower(:userName) group by a.nameAndSurname")
+    Long findAnotherSameAuthor(String userName);
 }
