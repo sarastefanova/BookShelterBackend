@@ -1,7 +1,11 @@
 package com.example.books.controller;
 
+import com.example.books.model.Book;
 import com.example.books.model.Roles;
 import com.example.books.model.User;
+import com.example.books.model.exceptions.InvalidBookId;
+import com.example.books.model.exceptions.InvalidUserId;
+import com.example.books.service.BookService;
 import com.example.books.service.RolesService;
 import com.example.books.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -22,10 +26,11 @@ public class RestUserController {
 
     private final UserService userService;
     private final RolesService rolesService;
-
-    public RestUserController(UserService userService, RolesService rolesService) {
+    private final BookService bookService;
+    public RestUserController(UserService userService, RolesService rolesService, BookService bookService) {
         this.userService = userService;
         this.rolesService = rolesService;
+        this.bookService = bookService;
     }
 
 //    @PostMapping
@@ -121,6 +126,21 @@ public class RestUserController {
             return (this.userService.editUserImg(id,userName,name,surname,address,number,email,user.getFile()));
         }
         return (this.userService.editUserImg(id,userName,name,surname,address,number,email,file.getBytes()));
+    }
+
+    @PatchMapping(path = "/addFavouriteBook/{id}",params = "name")
+    public ResponseEntity<?> user(@PathVariable(value="id") Long id,
+                     @RequestParam(value = "name")String name){
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        List<Book>allBooksLiked=user.getLikedBooks();
+
+        if(allBooksLiked.contains(book)){
+            return  new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        allBooksLiked.add(book);
+        user.setLikedBooks(allBooksLiked);
+        return new ResponseEntity<>(this.userService.save(user),HttpStatus.OK);
     }
 
     @PostMapping("/registration")
