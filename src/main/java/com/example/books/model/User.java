@@ -46,6 +46,8 @@ public class User implements UserDetails {
     @ManyToOne
     Roles roles;
 
+    @ManyToMany
+    List<Book>likedBooks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
