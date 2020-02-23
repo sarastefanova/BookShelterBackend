@@ -64,6 +64,12 @@ public class RestBookController {
         return this.bookService.getAllBooks(page, size);
     }
 
+    @GetMapping(path = "/getAllBooks")
+    public List<Book> getAllBooksAuthor(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                  @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size) {
+        return this.bookService.getAllBooksAuthor();
+    }
+
     @PatchMapping("/{name}")
     public Book updateBook(
                            @PathVariable(value="name") String name,

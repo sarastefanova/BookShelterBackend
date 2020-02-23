@@ -18,4 +18,6 @@ public interface BookRepository {
 
     List<Book> searchBookOrAuthor(String name);
     Long findAnotherSameUserName(String userName);
+
+    List<Book> getAllBooksAuthor();
 }

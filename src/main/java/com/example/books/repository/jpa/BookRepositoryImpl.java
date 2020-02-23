@@ -5,6 +5,7 @@ import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.expression.spel.ast.OpAnd;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import javax.swing.text.html.Option;
@@ -33,7 +34,12 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Page<Book> getAllBooks(int page, int size) {
         org.springframework.data.domain.Page<Book> result=this.bookJpaRepository.findAll(PageRequest.of(page, size));
-        return new Page<>(page,result.getTotalPages(),size,result.getContent());
+        //Page<Book>newBook=this.bookJpaRepository.findAll(PageRequest.of(page,size)).map(item->)
+        List<Book>newBooks=this.bookJpaRepository.findAllAuthors();
+        int totalPages=Math.round((float) newBooks.size()/size);
+        //return new  Page<>(page,newBooks.size(),size,newBooks);
+
+        return  Page.slice(newBooks,page,size);
     }
 
     @Override
@@ -64,5 +70,13 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Long findAnotherSameUserName(String userName) {
         return this.bookJpaRepository.findAnotherSameUserName(userName);
+    }
+
+    @Override
+    public List<Book> getAllBooksAuthor() {
+
+         List<Book> booksWithoutDeletedAuthors=this.bookJpaRepository.findAllAuthors();
+
+        return null;
     }
 }

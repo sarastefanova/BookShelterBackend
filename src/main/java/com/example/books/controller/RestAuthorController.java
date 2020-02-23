@@ -3,6 +3,7 @@ package com.example.books.controller;
 import com.example.books.model.Author;
 import com.example.books.model.exceptions.AuthorAlreadyExists;
 import com.example.books.model.exceptions.InvalidAuthorsId;
+import com.example.books.model.paginate.Page;
 import com.example.books.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MimeTypeUtils;
@@ -61,15 +62,33 @@ public class RestAuthorController {
         this.authorService.deleteAuthor(nameAndSurname);
     }
 
+    @DeleteMapping(path = "deleteFlag/{nameAndSurname}")
+    public void deleteAuthor(@PathVariable String nameAndSurname,@RequestParam(value = "isDeleted") int isDeleted){
+        this.authorService.deleteAuthorWithFlag(nameAndSurname,isDeleted);
+    }
+
+
     @GetMapping
     public List<Author> getAllAuthors(){
         return this.authorService.listAuthors();
     }
 
 
+    @GetMapping(path = "/allAuthorsPaginate")
+    public Page<Author> getAllAuthors(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                      @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size) {
+        return this.authorService.getAllAuthorsPaginate(page, size);
+    }
+
     @GetMapping(params = "nameAndSurname")
     public Optional<Author> searchByName(@RequestParam String nameAndSurname){
         return authorService.getById(nameAndSurname);
+    }
+
+
+    @GetMapping("/getAuthorName")
+    public String getAuthorsName(@RequestBody Author author){
+        return this.authorService.getAuthorName(author);
     }
 
     @GetMapping(path = "/allNames")

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -66,7 +67,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<Book> getAllBooks(int page, int size) {
-       return this.bookRepository.getAllBooks(page,size);
+        Page<Book>newBooks =this.bookRepository.getAllBooks(page,size);
+        Long i=newBooks.getContent().stream().filter(p->p.getAuthor().getIsDeleted()==1).count();
+
+
+        return this.bookRepository.getAllBooks(page,size);
     }
 
     @Override
@@ -85,6 +90,11 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getAllBookByAuthor(String nameAndSurname) {
         return this.bookRepository.getAllBookByAuthor(nameAndSurname);
+    }
+
+    @Override
+    public List<Book> getAllBooksAuthor() {
+        return this.bookRepository.getAllBooksAuthor();
     }
 
     @Override

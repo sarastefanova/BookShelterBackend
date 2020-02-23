@@ -19,7 +19,7 @@ public interface BookService {
     Page<Book> getAllBooks(int page, int size);
     Book editBook(String name, String nameAndSurname, int price,String shortContentBook) throws InvalidBookId, InvalidAuthorsName;
     List<Book>getAllBookByAuthor(String nameAndSurname);
-
+    List<Book> getAllBooksAuthor();
     List<Book> searchBookOrAuthor(String name);
 
 

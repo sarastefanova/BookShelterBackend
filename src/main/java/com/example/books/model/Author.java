@@ -21,6 +21,9 @@ public class Author {
     @Lob
     private byte[] file;
 
+
+    int isDeleted;
+
     public Author(String nameAndSurname, String shortAuthorBiography) {
         this.nameAndSurname = nameAndSurname;
         this.shortAuthorBiography = shortAuthorBiography;
