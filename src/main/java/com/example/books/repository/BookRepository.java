@@ -1,5 +1,6 @@
 package com.example.books.repository;
 
+import com.example.books.model.Author;
 import com.example.books.model.Book;
 import com.example.books.model.paginate.Page;
 
@@ -20,4 +21,6 @@ public interface BookRepository {
     Long findAnotherSameUserName(String userName);
 
     List<Book> getAllBooksAuthor();
+
+    Author getAuthorByBook(String name);
 }

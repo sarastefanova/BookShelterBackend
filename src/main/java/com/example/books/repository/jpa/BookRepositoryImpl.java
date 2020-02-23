@@ -1,5 +1,6 @@
 package com.example.books.repository.jpa;
 
+import com.example.books.model.Author;
 import com.example.books.model.Book;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
@@ -78,5 +79,10 @@ public class BookRepositoryImpl implements BookRepository {
          List<Book> booksWithoutDeletedAuthors=this.bookJpaRepository.findAllAuthors();
 
         return null;
+    }
+
+    @Override
+    public Author getAuthorByBook(String name) {
+        return this.bookJpaRepository.getAuthorByBook(name);
     }
 }

@@ -102,4 +102,9 @@ public class BookServiceImpl implements BookService {
         return this.bookRepository.searchBookOrAuthor(name);
     }
 
+    @Override
+    public Author getAuthorByBook(String name) {
+        return this.bookRepository.getAuthorByBook(name);
+    }
+
 }

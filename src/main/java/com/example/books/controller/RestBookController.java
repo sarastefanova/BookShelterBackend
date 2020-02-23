@@ -102,4 +102,8 @@ public class RestBookController {
         return this.bookService.getAllBookByAuthor(nameAndSurname);
     }
 
+    @GetMapping("/{name}/authorBook")
+    public Author getAuthorByBook(@PathVariable String name){
+        return this.bookService.getAuthorByBook(name);
+    }
 }

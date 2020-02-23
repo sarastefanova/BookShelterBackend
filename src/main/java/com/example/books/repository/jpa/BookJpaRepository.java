@@ -1,5 +1,6 @@
 package com.example.books.repository.jpa;
 
+import com.example.books.model.Author;
 import com.example.books.model.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,7 @@ public interface BookJpaRepository extends JpaRepository<Book,String> {
 
     @Query("select b from Book b join b.author author where author.isDeleted like 0")
     List<Book> findAllAuthors();
+
+    @Query("select b.author from Book b where b.name like :name")
+    Author getAuthorByBook(String name);
 }
