@@ -47,6 +47,7 @@ public class User implements UserDetails {
     Roles roles;
 
     @ManyToMany
+            @JsonIgnore
     List<Book>likedBooks;
 
     @Override

@@ -5,6 +5,7 @@ import com.example.books.model.Roles;
 import com.example.books.model.User;
 import com.example.books.model.exceptions.InvalidBookId;
 import com.example.books.model.exceptions.InvalidUserId;
+import com.example.books.model.exceptions.ListContainsBook;
 import com.example.books.service.BookService;
 import com.example.books.service.RolesService;
 import com.example.books.service.UserService;
@@ -140,19 +141,21 @@ public class RestUserController {
     }
 
     @PatchMapping(path = "/addFavouriteBook/{id}/{name}")
-    public ResponseEntity<?> user(@PathVariable(value="id") Long id,
+    public User user(@PathVariable(value="id") Long id,
                      @PathVariable(value = "name")String name){
         User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
         List<Book>allBooksLiked=user.getLikedBooks();
 
         if(allBooksLiked.contains(book)){
-            return  new ResponseEntity<>(HttpStatus.CONFLICT);
+            throw   new ListContainsBook();
         }
         allBooksLiked.add(book);
         user.setLikedBooks(allBooksLiked);
 
-        return new ResponseEntity<>(this.userService.save(user),HttpStatus.NO_CONTENT);
+
+
+        return this.userService.addFavouriteBook(user);
     }
 
     @PostMapping("/registration")

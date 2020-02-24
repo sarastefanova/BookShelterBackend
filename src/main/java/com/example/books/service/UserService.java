@@ -25,4 +25,6 @@ public interface UserService extends UserDetailsService {
     List<Book> allFavouriteBooksOfUser(Long id);
 
     void deleteFavBook(Long id, Book book);
+
+    User addFavouriteBook(User user);
 }

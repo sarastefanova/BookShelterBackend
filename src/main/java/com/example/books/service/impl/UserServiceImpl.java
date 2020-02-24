@@ -170,6 +170,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User addFavouriteBook(User user) {
+        return this.userRepository.save(user);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         return userRepository.findByUserName(s);
     }
