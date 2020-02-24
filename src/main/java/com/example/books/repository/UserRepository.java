@@ -1,5 +1,6 @@
 package com.example.books.repository;
 
+import com.example.books.model.Book;
 import com.example.books.model.User;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface UserRepository {
     User findByUserName(String userName);
 
     Long findAnotherSameUserName(String userName,Long id);
+
+    List<Book> allFavouriteBooksOfUser(Long id);
 }

@@ -1,5 +1,6 @@
 package com.example.books.service;
 
+import com.example.books.model.Book;
 import com.example.books.model.Roles;
 import com.example.books.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,4 +21,8 @@ public interface UserService extends UserDetailsService {
     User editUser(Long id,String userName,String name, String surname, String address, String number, String email);
     long findAnotherSameUserName(String userName,Long id);
     User editUserImg(Long id,String userName,String name, String surname, String address, String number, String email,byte[] file);
+
+    List<Book> allFavouriteBooksOfUser(Long id);
+
+    void deleteFavBook(Long id, Book book);
 }

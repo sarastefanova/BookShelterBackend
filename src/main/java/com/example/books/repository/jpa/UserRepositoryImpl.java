@@ -1,5 +1,6 @@
 package com.example.books.repository.jpa;
 
+import com.example.books.model.Book;
 import com.example.books.model.User;
 import com.example.books.repository.UserRepository;
 import org.springframework.stereotype.Repository;
@@ -50,5 +51,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Long findAnotherSameUserName(String userName,Long id) {
         return this.userJpaRepository.findAnotherSameUserName(userName,id);
+    }
+
+    @Override
+    public List<Book> allFavouriteBooksOfUser(Long id) {
+        return this.userJpaRepository.allFavouriteBooksOfUser(id);
     }
 }

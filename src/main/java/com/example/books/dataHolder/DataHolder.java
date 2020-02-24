@@ -32,7 +32,7 @@ public class DataHolder {
 
     @PostConstruct
     public void init(){
-//        Roles role=new Roles();
+        Roles role=new Roles();
 //        role.setRole("admin");
 //
 //        roles.add(role);
@@ -43,16 +43,16 @@ public class DataHolder {
 //        roles.add(role);
 //
 //        this.rolesRepository.saveAll(roles);
-//        User user=new User();
-//        user.setName("Sara");
-//        user.setSurname("Stefanova");
-//        user.setNumber("078230568");
-//        user.setEmail("sarasstefanova@gmail.com");
-//        user.setPassword(bCryptPasswordEncoder.encode("sara"));
-//        user.setUserName("stefanovaAdmin");
-//        user.setAddress("Blagoja Strackov 6");
-//        role=rolesRepository.checkIfExcistRole("admin");
-//        user.setRoles(role);
-//        this.userJpaRepository.save(user);
+        User user=new User();
+        user.setName("Sara");
+        user.setSurname("Stefanova");
+        user.setNumber("078230568");
+        user.setEmail("sarasstefanova@gmail.com");
+        user.setPassword(bCryptPasswordEncoder.encode("sara"));
+        user.setUserName("stefanovaAdmin");
+        user.setAddress("Blagoja Strackov 6");
+        role=rolesRepository.checkIfExcistRole("admin");
+        user.setRoles(role);
+        this.userJpaRepository.save(user);
     }
 }

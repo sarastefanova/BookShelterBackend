@@ -1,5 +1,6 @@
 package com.example.books.service.impl;
 
+import com.example.books.model.Book;
 import com.example.books.model.Roles;
 import com.example.books.model.User;
 import com.example.books.model.exceptions.InvalidUserId;
@@ -148,6 +149,23 @@ public class UserServiceImpl implements UserService {
 
 
 
+
+    }
+
+    @Override
+    public List<Book> allFavouriteBooksOfUser(Long id) {
+        return this.userRepository.allFavouriteBooksOfUser(id);
+    }
+
+    @Override
+    public void deleteFavBook(Long id, Book book) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        List<Book>allBooksLiked=user.getLikedBooks();
+        if(allBooksLiked.contains(book)){
+            allBooksLiked.remove(book);
+        }
+        user.setLikedBooks(allBooksLiked);
+        this.userRepository.save(user);
 
     }
 

@@ -95,6 +95,17 @@ public class RestUserController {
                 return userService.findById(id);
     }
 
+    @GetMapping(path = "/allFavouriteBooksOfUser/{id}")
+    public List<Book> allBooks(@PathVariable(value = "id")Long id){
+        return this.userService.allFavouriteBooksOfUser(id);
+    }
+
+    @DeleteMapping(path = "/deleteFavBookUser/{id}",params = "name")
+    public void deleteFavBook(@PathVariable(value ="id")Long id,
+                              @RequestParam(value = "name")String name){
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        this.userService.deleteFavBook(id,book);
+    }
 
     @PatchMapping("/{id}")
     public User updateUser(
@@ -128,9 +139,9 @@ public class RestUserController {
         return (this.userService.editUserImg(id,userName,name,surname,address,number,email,file.getBytes()));
     }
 
-    @PatchMapping(path = "/addFavouriteBook/{id}",params = "name")
+    @PatchMapping(path = "/addFavouriteBook/{id}/{name}")
     public ResponseEntity<?> user(@PathVariable(value="id") Long id,
-                     @RequestParam(value = "name")String name){
+                     @PathVariable(value = "name")String name){
         User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
         List<Book>allBooksLiked=user.getLikedBooks();
@@ -140,7 +151,8 @@ public class RestUserController {
         }
         allBooksLiked.add(book);
         user.setLikedBooks(allBooksLiked);
-        return new ResponseEntity<>(this.userService.save(user),HttpStatus.OK);
+
+        return new ResponseEntity<>(this.userService.save(user),HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/registration")
@@ -159,11 +171,13 @@ public class RestUserController {
     @GetMapping("/login")
     public ResponseEntity<?> getUser(Principal principal){
         //Principal principal = request.getUserPrincipal();
+        int j=0;
         if(principal == null || principal.getName() == null){
             //This means; logout will be successful. login?logout
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        //username = principal.getName()
+        String username = principal.getName();
+        int i=0;
         return ResponseEntity.ok(userService.getByUserName(principal.getName()));
     }
 
