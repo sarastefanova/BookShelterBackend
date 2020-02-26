@@ -50,11 +50,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBookWithImg(String name, String nameAndSurname, int price, byte[] file,String shortContentBook) throws InvalidAuthorsName, IOException {
+    public Book createBookWithImg(String name, String nameAndSurname, int price, byte[] file,String shortContentBook,int availability) throws InvalidAuthorsName, IOException {
 
             Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
             if((this.bookRepository.findAnotherSameUserName(name))==null){
-                Book   book=new Book(name,author,price,file,shortContentBook);
+                Book   book=new Book(name,author,price,file,shortContentBook,availability);
                 return this.bookRepository.save(book);
             }
               else throw new BookAlreadyExists();
@@ -75,7 +75,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book editBook(String name, String nameAndSurname, int price,String shortContentBook) throws InvalidBookId, InvalidAuthorsName {
+    public Book editBook(String name, String nameAndSurname, int price,String shortContentBook,int availability) throws InvalidBookId, InvalidAuthorsName {
         Book updateBook=  this.bookRepository.findById(name).orElseThrow(InvalidBookId::new);
         Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
 
@@ -83,6 +83,7 @@ public class BookServiceImpl implements BookService {
             updateBook.setPrice(price);
             updateBook.setFile(updateBook.getFile());
             updateBook.setShortContentBook(shortContentBook);
+            updateBook.setAvailability(availability);
             return this.bookRepository.save(updateBook);
 
     }
@@ -105,6 +106,12 @@ public class BookServiceImpl implements BookService {
     @Override
     public Author getAuthorByBook(String name) {
         return this.bookRepository.getAuthorByBook(name);
+    }
+
+    @Override
+    public Page<Book> searchBookOrAuthorPage(String name,int page, int pageSize) {
+        List<Book>books=this.bookRepository.searchBookOrAuthor(name);
+        return Page.slice(books,page,pageSize);
     }
 
 }

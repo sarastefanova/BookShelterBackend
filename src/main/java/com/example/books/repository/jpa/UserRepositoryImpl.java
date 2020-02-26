@@ -57,4 +57,14 @@ public class UserRepositoryImpl implements UserRepository {
     public List<Book> allFavouriteBooksOfUser(Long id) {
         return this.userJpaRepository.allFavouriteBooksOfUser(id);
     }
+
+    @Override
+    public List<Book> allBooksOrdered(Long id) {
+        return this.userJpaRepository.allBooksOrdered(id);
+    }
+
+    @Override
+    public List<Book> getAllRequestsOrders() {
+        return this.userJpaRepository.getAllRequestsOrders();
+    }
 }

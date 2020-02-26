@@ -22,4 +22,10 @@ public interface UserJpaRepository extends JpaRepository<User,Long> {
 
      @Query("select distinct u.likedBooks from User u join u.likedBooks likedBooks where u.id like :id")
     List<Book> allFavouriteBooksOfUser(Long id);
+
+    @Query("select distinct u.orderedBooks from User u join u.orderedBooks orderedBooks where u.id like :id")
+    List<Book> allBooksOrdered(Long id);
+
+    @Query("select distinct u.orderedBooks from User u join u.orderedBooks orderedBooks")
+    List<Book> getAllRequestsOrders();
 }

@@ -50,6 +50,10 @@ public class User implements UserDetails {
             @JsonIgnore
     List<Book>likedBooks;
 
+    @ManyToMany
+    @JsonIgnore
+    List<Book>orderedBooks;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<Roles> roles = new ArrayList<>();

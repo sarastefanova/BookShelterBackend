@@ -49,12 +49,13 @@ public class RestBookController {
                            @RequestParam(value="nameAndSurname") String nameAndSurname,
                            @RequestParam(value="price") String price,
                            @RequestParam(value = "file",required = false)MultipartFile file,
-                              @RequestParam(value = "shortContentBook")String shortContentBook) throws InvalidAuthorsName, IOException {
+                              @RequestParam(value = "shortContentBook")String shortContentBook,
+                              @RequestParam(value = "availability")int availability) throws InvalidAuthorsName, IOException {
 
 
         int priceBook=Integer.parseInt(price);
 
-                return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes(),shortContentBook);
+                return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes(),shortContentBook,availability);
     }
 
 
@@ -77,8 +78,9 @@ public class RestBookController {
                            @PathVariable(value="name") String name,
                            @RequestParam(value="nameAndSurname") String nameAndSurname,
                            @RequestParam(value="price") int price,
-                           @RequestParam(value = "shortContentBook")String shortContentBook) throws InvalidAuthorsId, InvalidBookId, InvalidAuthorsName, IOException {
-        return this.bookService.editBook(name,nameAndSurname,price,shortContentBook);
+                           @RequestParam(value = "shortContentBook")String shortContentBook,
+                           @RequestParam(value = "availability")int availability) throws InvalidAuthorsId, InvalidBookId, InvalidAuthorsName, IOException {
+        return this.bookService.editBook(name,nameAndSurname,price,shortContentBook,availability);
     }
 
     @DeleteMapping("/{name}")
@@ -96,6 +98,13 @@ public class RestBookController {
     @GetMapping(path = "/searchBook",params = "name")
     public List<Book> searchBookOrAuthor(@RequestParam String name){
         return bookService.searchBookOrAuthor(name);
+    }
+
+    @GetMapping(path = "/searchBookPage",params = "name")
+    public Page<Book> searchBookOrAuthorPage(@RequestParam String name,@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                             @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size){
+
+        return bookService.searchBookOrAuthorPage(name,page,size);
     }
 
 
