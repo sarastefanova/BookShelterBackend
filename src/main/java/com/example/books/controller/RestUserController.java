@@ -1,17 +1,17 @@
 package com.example.books.controller;
 
-import com.example.books.model.Book;
-import com.example.books.model.Roles;
-import com.example.books.model.User;
+import com.example.books.model.*;
 import com.example.books.model.exceptions.InvalidBookId;
 import com.example.books.model.exceptions.InvalidUserId;
 import com.example.books.model.exceptions.ListContainsBook;
-import com.example.books.model.userOrdered;
+import com.example.books.model.paginate.Page;
+import com.example.books.repository.UserOrderedBooks;
 import com.example.books.service.BookService;
 import com.example.books.service.RolesService;
 import com.example.books.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,62 +35,7 @@ public class RestUserController {
         this.bookService = bookService;
     }
 
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public User createPizza(@RequestParam(value="userName") String userName,
-//                            @RequestParam(value="name") String name,
-//                            @RequestParam(value="surname") String surname,
-//                            @RequestParam(value="address",required = false)String address,
-//                            @RequestParam(value = "number")String number,
-//                            @RequestParam(value = "password")String password,
-//                            @RequestParam(value = "passwordConfirm",required = false)String passwordConfirm,
-//                            @RequestParam(value = "email",required = false)String email,
-//                            @RequestParam(value = "roles",required = false)String roles) throws UserAlreadyExists, RolesNotFoundException {
-//
-//        User checkUser=this.service.getByUserName(userName);
-//        if(checkUser!=null)throw new UserAlreadyExists("User already exists");
-//
-//        Roles newRole=this.rolesService.checkIfExcistRole(roles);
-//        if(newRole!=null){
-//            return service.createUser(userName,name,surname,address,number,password,passwordConfirm,email,newRole);
-//        }
-//        throw new RolesNotFoundException();
-//
-//    }
 
-//    @GetMapping
-//    public List<User> getAllUsers(){
-//        return this.service.listUsers();
-//    }
-//
-//    @PatchMapping("/{userName}")
-//    public User editUser(@PathVariable String userName,
-//                         @RequestParam(value="name") String name,
-//                         @RequestParam(value="surname") String surname,
-//                         @RequestParam(value="address",required = false)String address,
-//                         @RequestParam(value = "number")String number,
-//                         @RequestParam(value = "password")String password,
-//                         @RequestParam(value = "passwordConfirm",required = false)String passwordConfirm,
-//                         @RequestParam(value = "email",required = false)String email,
-//                         @RequestParam(value = "roles",required = false)String roles) throws RolesNotFoundException {
-//
-//        Roles newRole=this.rolesService.checkIfExcistRole(roles);
-//        if(newRole!=null){
-//            return service.editUser(userName,name,surname,address,number,password,passwordConfirm,email,newRole);
-//        }
-//        throw new RolesNotFoundException();
-//
-//    }
-//
-//    @GetMapping(params = "userName")
-//    public User searchByName(@RequestParam String userName){
-//        return service.getByUserName(userName);
-//    }
-//
-//    @DeleteMapping("/{userName}")
-//    public void deletePizza(@PathVariable String userName){
-//        this.service.deleteUser(userName);
-//    }
 
     @GetMapping(params = "id")
     public Optional<User> searchById(@RequestParam Long id){
@@ -112,10 +57,32 @@ public class RestUserController {
         return this.userService.allBooksOrderedStatus(id);
     }
 
-    @GetMapping(path = "/getStatusBookOrdered/{name}")
-    public int getStatusBookOrdered(@PathVariable(value = "name")String name){
+    @GetMapping(path = "/getAllFavouriteBooksUser/{id}")
+    public List<Book> getAllFavouriteBooksUser(@PathVariable(value = "id")Long id){
+        return this.userService.getAllFavouriteBooksUser(id);
+    }
+
+
+    @GetMapping(path = "/getAllFavouriteBooksUserPaginate/{id}")
+    public Page<Book> getAllFavouriteBooksUserPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                                       @RequestHeader(name = "page-size", defaultValue = "10", required = false)int size,
+                                                               @PathVariable(value = "id")Long id){
+        return this.userService.getAllFavouriteBooksUserPaginate(page,size,id);
+    }
+
+    @GetMapping(path = "/getStatusBookOrdered/{id}/{name}")
+    public int getStatusBookOrdered(@PathVariable(value = "id")Long id,@PathVariable(value = "name")String name){
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-        return this.userService.getStatusBookOrdered(book);
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        return this.userService.getStatusBookOrdered(user,book);
+    }
+
+
+    @GetMapping(path = "/getStatusOrderedFavouriteBook/{id}/{name}")
+    public int getStatusOrderedFavouriteBook(@PathVariable(value = "id")Long id,@PathVariable(value = "name")String name){
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        return this.userService.getStatusOrderedFavouriteBook(user,book);
     }
 
 
@@ -127,6 +94,29 @@ public class RestUserController {
     @GetMapping(path = "/getAllRequestsOrdersStatus")//kje go koristeme ovaa veke za status plus da imame na narackata
     public List<Book> getAllRequestsOrdersStatus(){
         return this.userService.getAllRequestsOrdersStatus();
+    }
+
+    @GetMapping(path = "/getAllRequests")//
+    public List<userOrdered> getAllRequests(){
+
+        return this.userService.getAllRequests();
+    }
+
+
+    @GetMapping(path = "/getAllRequestsPaginate")//
+    public Page<userOrdered> getAllRequestsPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                                    @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size){
+
+        return this.userService.getAllRequestsPaginate(page,size);
+    }
+
+
+    @GetMapping(path = "/allOrderedBooksStatusPaginate/{id}")//
+    public Page<Book> allOrderedBooksStatusPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                                    @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size,
+                                                           @PathVariable(value = "id")Long id){
+
+        return this.userService.allOrderedBooksStatus(page,size,id);
     }
 
     @DeleteMapping(path = "/deleteFavBookUser/{id}",params = "name")
@@ -141,6 +131,21 @@ public class RestUserController {
                               @RequestParam(value = "name")String name){
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
         this.userService.deleteOrderedBook(id,book);
+    }
+
+
+    @DeleteMapping(path = "/deleteOrderedBookUserStatus/{id}",params = "name")
+    public void deleteOrderedBookStatus(@PathVariable(value ="id")Long id,
+                                  @RequestParam(value = "name")String name){
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        this.userService.deleteOrderedBookStatus(id,book);
+    }
+
+    @DeleteMapping(path = "/deleteFavouriteBookUser/{id}",params = "name")
+    public void deleteFavouriteBookUser(@PathVariable(value ="id")Long id,
+                                        @RequestParam(value = "name")String name){
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        this.userService.deleteFavouriteBookUser(id,book);
     }
 
     @PatchMapping("/{id}")
@@ -193,6 +198,24 @@ public class RestUserController {
         return this.userService.addFavouriteBook(user);
     }
 
+    @PatchMapping(path = "/addFavouriteBookFlag/{id}/{name}")
+    public UserFavouriteBooks userFavouriteBooks(@PathVariable(value="id") Long id,
+                                   @PathVariable(value = "name")String name){
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+//        List<Book>allBooksLiked=user.getLikedBooks();
+//
+//        if(allBooksLiked.contains(book)){
+//            throw   new ListContainsBook();
+//        }
+//        allBooksLiked.add(book);
+//        user.setLikedBooks(allBooksLiked);
+
+
+
+        return this.userService.addFavouriteBookForUser(user,book);
+    }
+
 
     @PatchMapping(path = "/addOrderedBook/{id}/{name}")
     public User addOrder(@PathVariable(value="id") Long id,
@@ -225,6 +248,31 @@ public class RestUserController {
 //        user.setOrderedBooks(allBooksOrdered);
 
         return this.userService.addFavouriteBookStatus(user,book);
+    }
+
+    @PatchMapping(path = "/approveOrder/{id}/{name}")
+    public userOrdered approveOrder(@PathVariable(value = "id")Long id,
+                                         @PathVariable(value = "name")String name){
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+
+
+        return this.userService.approveOrder(user,book);
+    }
+
+    @PatchMapping(path = "/declineOrder/{id}/{name}")
+    public userOrdered declineOrder(@PathVariable(value = "id")Long id,
+                                    @PathVariable(value = "name")String name){
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        return this.userService.declineOrder(user,book);
+    }
+
+    @GetMapping(path = "/getUserByBook/{id}/{name}")
+    public User getUserByBook(@PathVariable(value = "id")Long id,@PathVariable(value = "name")String name){
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        return this.userService.getUserByBook(user,book);
     }
 
     @PostMapping("/registration")

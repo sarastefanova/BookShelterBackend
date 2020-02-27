@@ -2,6 +2,7 @@ package com.example.books.repository.jpa;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
 import org.springframework.data.domain.PageRequest;
@@ -84,5 +85,12 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Author getAuthorByBook(String name) {
         return this.bookJpaRepository.getAuthorByBook(name);
+    }
+
+    @Override
+    public Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page,int size) {
+        List<UserFavouriteBooks>getBooks=this.bookJpaRepository.getAllBooksAuthorFavourite();
+        int i=0;
+        return Page.slice(getBooks,page,size);
     }
 }

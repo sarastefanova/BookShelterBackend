@@ -19,6 +19,16 @@ public interface UserOrderedBooksJpaRepository extends JpaRepository<userOrdered
     @Query("select distinct u.book from userOrdered u where u.user like :user")
     List<Book> getAllBooksOrderedUser(User user);
 
-    @Query("select  u.status from userOrdered u where u.book like :name")
-    int getStatusBookOrdered(Book name);
+    @Query("select  u.status from userOrdered u where u.book like :name and u.user like :user")
+    int getStatusBookOrdered(User user,Book name);
+
+    @Query("select  u.user from userOrdered u where u.book like :book and u.user like :user")
+    User getUserByBook(User user,Book book);
+
+
+    @Query("select distinct u from userOrdered u where u.book like :book and u.user like :user")
+    userOrdered findUserOrder(User user, Book book);
+
+    @Query("select  distinct  u from userOrdered u where u.isInRequests=0")
+    List<userOrdered> getAllRequests();
 }

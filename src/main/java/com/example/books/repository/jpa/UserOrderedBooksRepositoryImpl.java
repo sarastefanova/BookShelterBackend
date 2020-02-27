@@ -2,11 +2,14 @@ package com.example.books.repository.jpa;
 
 import com.example.books.model.Book;
 import com.example.books.model.User;
+import com.example.books.model.exceptions.InvalidBookOrderKye;
 import com.example.books.model.userOrdered;
+import com.example.books.model.userOrderedBooksKey;
 import com.example.books.repository.UserOrderedBooks;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserOrderedBooksRepositoryImpl implements UserOrderedBooks {
@@ -33,8 +36,35 @@ public class UserOrderedBooksRepositoryImpl implements UserOrderedBooks {
     }
 
     @Override
-    public int getStatusBookOrdered(Book name) {
+    public Optional<userOrdered> findById(userOrderedBooksKey userOrderedKey) {
+        return this.userOrderedBooksJpaRepository.findById(userOrderedKey);
+    }
 
-        return this.userOrderedBooksJpaRepository.getStatusBookOrdered(name);
+
+    @Override
+    public int getStatusBookOrdered(User user,Book name) {
+
+        return this.userOrderedBooksJpaRepository.getStatusBookOrdered(user,name);
+    }
+
+    @Override
+    public void deleteOrder(User user, Book book) {
+        userOrdered userOrdered=this.findById(new userOrderedBooksKey(user.getId(),book.getName())).orElseThrow(InvalidBookOrderKye::new);
+        this.userOrderedBooksJpaRepository.delete(userOrdered);
+    }
+
+    @Override
+    public User getUserByBook(User user,Book book) {
+        return this.userOrderedBooksJpaRepository.getUserByBook(user,book);
+    }
+
+    @Override
+    public userOrdered findUserOrder(User user, Book book) {
+        return this.userOrderedBooksJpaRepository.findUserOrder(user,book);
+    }
+
+    @Override
+    public List<userOrdered> getAllRequests() {
+        return this.userOrderedBooksJpaRepository.getAllRequests();
     }
 }

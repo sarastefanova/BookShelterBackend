@@ -2,6 +2,7 @@ package com.example.books.repository.jpa;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.UserFavouriteBooks;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,7 @@ public interface BookJpaRepository extends JpaRepository<Book,String> {
 
     @Query("select b.author from Book b where b.name like :name")
     Author getAuthorByBook(String name);
+
+    @Query("select b from Book b left join UserFavouriteBooks u on b like u.book")
+    List<UserFavouriteBooks> getAllBooksAuthorFavourite();
 }

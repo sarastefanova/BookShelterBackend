@@ -2,6 +2,7 @@ package com.example.books.service;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.exceptions.InvalidAuthorsName;
 import com.example.books.model.exceptions.InvalidBookId;
 import com.example.books.model.paginate.Page;
@@ -27,4 +28,6 @@ public interface BookService {
     Author getAuthorByBook(String name);
 
     Page<Book> searchBookOrAuthorPage(String name,int page, int pageSize);
+
+    Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size);
 }

@@ -2,6 +2,7 @@ package com.example.books.controller;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.exceptions.InvalidAuthorsId;
 import com.example.books.model.exceptions.InvalidAuthorsName;
 import com.example.books.model.exceptions.InvalidBookId;
@@ -88,7 +89,11 @@ public class RestBookController {
         this.bookService.deleteBook(name);
     }
 
-
+    @GetMapping("/getAllBooksAuthorFavourite")
+    public Page<UserFavouriteBooks>getAllBooksAuthorFavourite(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                                              @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size){
+        return this.bookService.getAllBooksAuthorFavourite(page,size);
+    }
 
     @GetMapping(params = "name")
     public Optional<Book> searchByName(@RequestParam String name){

@@ -2,6 +2,7 @@ package com.example.books.service.impl;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.exceptions.BookAlreadyExists;
 import com.example.books.model.exceptions.InvalidAuthorsId;
 import com.example.books.model.exceptions.InvalidAuthorsName;
@@ -112,6 +113,11 @@ public class BookServiceImpl implements BookService {
     public Page<Book> searchBookOrAuthorPage(String name,int page, int pageSize) {
         List<Book>books=this.bookRepository.searchBookOrAuthor(name);
         return Page.slice(books,page,pageSize);
+    }
+
+    @Override
+    public Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size) {
+        return this.bookRepository.getAllBooksAuthorFavourite(page,size);
     }
 
 }

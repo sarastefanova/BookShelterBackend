@@ -2,6 +2,8 @@ package com.example.books.service;
 
 import com.example.books.model.Book;
 import com.example.books.model.User;
+import com.example.books.model.UserFavouriteBooks;
+import com.example.books.model.paginate.Page;
 import com.example.books.model.userOrdered;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -40,5 +42,29 @@ public interface UserService extends UserDetailsService {
 
     List<Book> allBooksOrderedStatus(Long id);
 
-    int getStatusBookOrdered(Book name);
+    int getStatusBookOrdered(User user,Book name);
+
+ void deleteOrderedBookStatus(Long id, Book book);
+
+    UserFavouriteBooks addFavouriteBookForUser(User user, Book book);
+
+    void deleteFavouriteBookUser(Long id, Book book);
+
+    List<Book> getAllFavouriteBooksUser(Long id);
+
+    int getStatusOrderedFavouriteBook(User user,Book book);
+
+    User getUserByBook(User user,Book book);
+
+    userOrdered approveOrder(User user, Book book);
+
+    userOrdered declineOrder(User user, Book book);
+
+    List<userOrdered> getAllRequests();
+
+    Page<userOrdered> getAllRequestsPaginate(int page, int size);
+
+    Page<Book> allOrderedBooksStatus(int page, int size, Long id);
+
+    Page<Book> getAllFavouriteBooksUserPaginate(int page, int size,Long id);
 }

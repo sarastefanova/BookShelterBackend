@@ -2,6 +2,7 @@ package com.example.books.repository;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.paginate.Page;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface BookRepository {
     List<Book> getAllBooksAuthor();
 
     Author getAuthorByBook(String name);
+
+    Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size);
 }

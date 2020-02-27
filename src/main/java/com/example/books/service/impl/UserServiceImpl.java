@@ -1,11 +1,10 @@
 package com.example.books.service.impl;
 
-import com.example.books.model.Book;
-import com.example.books.model.User;
-import com.example.books.model.exceptions.InvalidUserId;
-import com.example.books.model.exceptions.UserAlreadyExists;
-import com.example.books.model.userOrdered;
-import com.example.books.model.userOrderedBooksKey;
+import com.example.books.model.*;
+import com.example.books.model.exceptions.*;
+import com.example.books.model.paginate.Page;
+import com.example.books.repository.BookRepository;
+import com.example.books.repository.UserFavouriteBooksRepository;
 import com.example.books.repository.UserOrderedBooks;
 import com.example.books.repository.UserRepository;
 import com.example.books.service.UserService;
@@ -24,9 +23,11 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+    private final BookRepository bookRepository;
 
     private final UserOrderedBooks userOrderedBooks;
+
+    private final UserFavouriteBooksRepository userFavouriteBooksRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -34,11 +35,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, UserOrderedBooks userOrderedBooks) {
+    public UserServiceImpl(UserRepository userRepository, BookRepository bookRepository, UserOrderedBooks userOrderedBooks, UserFavouriteBooksRepository userFavouriteBooksRepository) {
         this.userRepository = userRepository;
+        this.bookRepository = bookRepository;
 
 
         this.userOrderedBooks = userOrderedBooks;
+
+        this.userFavouriteBooksRepository = userFavouriteBooksRepository;
     }
 
     @Override
@@ -206,10 +210,17 @@ public class UserServiceImpl implements UserService {
 
         userOrdered userOrdered=new userOrdered();
         userOrdered.setId(new userOrderedBooksKey(user.getId(),book.getName()));
-        userOrdered.setUser(user);
-        userOrdered.setBook(book);
-        userOrdered.setStatus(0);
-        return this.userOrderedBooks.userOrderedSave(userOrdered);
+        if(this.userOrderedBooks.findUserOrder(user,book)==null){
+            userOrdered.setUser(user);
+            userOrdered.setBook(book);
+            userOrdered.setStatus(0);
+            userOrdered.setIsInRequests(0);
+            UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepository.findFavBookUser(user,book);
+            userFavouriteBooks.setIsOrdered(1);
+            this.userFavouriteBooksRepository.userFavouriteBookUpdate(userFavouriteBooks);
+            return this.userOrderedBooks.userOrderedSave(userOrdered);
+        }
+       throw new UserFavouriteBooksAlreadyExists();
     }
 
     @Override
@@ -224,10 +235,104 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getStatusBookOrdered(Book name) {
+    public int getStatusBookOrdered(User user,Book name) {
 
-        return this.userOrderedBooks.getStatusBookOrdered(name);
+        return this.userOrderedBooks.getStatusBookOrdered(user,name);
     }
+
+    @Override
+    public void deleteOrderedBookStatus(Long id, Book book) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepository.findFavBookUser(user,book);
+        userFavouriteBooks.setIsOrdered(0);
+        this.userFavouriteBooksRepository.userFavouriteBookUpdate(userFavouriteBooks);
+        this.userOrderedBooks.deleteOrder(user,book);
+    }
+
+
+
+    @Override
+    public UserFavouriteBooks addFavouriteBookForUser(User user, Book book) {
+        UserFavouriteBooks userFavouriteBooks=new UserFavouriteBooks();
+        UserFavouriteBooksKey key=new UserFavouriteBooksKey(user.getId(),book.getName());
+        userFavouriteBooks.setBook(book);
+        userFavouriteBooks.setId(key);
+        userFavouriteBooks.setUser(user);
+        userFavouriteBooks.setIsOrdered(0);
+        return this.userFavouriteBooksRepository.userFavouriteBookSave(userFavouriteBooks);
+    }
+
+    @Override
+    public void deleteFavouriteBookUser(Long id, Book book) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        this.userFavouriteBooksRepository.deleteFavouriteBook(user,book);
+    }
+
+    @Override
+    public List<Book> getAllFavouriteBooksUser(Long id) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        return this.userFavouriteBooksRepository.getAllBooksFavouriteByUser(user);
+    }
+
+    @Override
+    public int getStatusOrderedFavouriteBook(User user,Book book) {
+        return this.userFavouriteBooksRepository.getStatusBookFavourite(user,book);
+    }
+
+    @Override
+    public User getUserByBook(User user,Book book)
+    {
+        return this.userOrderedBooks.getUserByBook(user,book);
+    }
+
+    @Override
+    public userOrdered approveOrder(User user, Book book) {
+        userOrderedBooksKey key=new userOrderedBooksKey(user.getId(),book.getName());
+//        userOrdered userOrdered=this.userOrderedBooks.findById(key).orElseThrow(InvalidBookOrderKye::new);
+        userOrdered userOrdered=this.userOrderedBooks.findUserOrder(user,book);
+        int i=0;
+        userOrdered.setStatus(1);
+        userOrdered.setIsInRequests(1);
+        book.setAvailability(book.getAvailability()-1);
+        this.bookRepository.save(book);
+        return  this.userOrderedBooks.userOrderedSave(userOrdered);
+    }
+
+    @Override
+    public userOrdered declineOrder(User user, Book book) {
+        userOrderedBooksKey key=new userOrderedBooksKey(user.getId(),book.getName());
+        userOrdered userOrdered=this.userOrderedBooks.findUserOrder(user,book);
+        userOrdered.setStatus(2);
+        userOrdered.setIsInRequests(1);
+        return  this.userOrderedBooks.userOrderedSave(userOrdered);
+    }
+
+    @Override
+    public List<userOrdered> getAllRequests() {
+        return this.userOrderedBooks.getAllRequests();
+    }
+
+    @Override
+    public Page<userOrdered> getAllRequestsPaginate(int page, int size) {
+        List<userOrdered>userOrderedList=this.userOrderedBooks.getAllRequests();
+        return Page.slice(userOrderedList,page,size);
+    }
+
+    @Override
+    public Page<Book> allOrderedBooksStatus(int page, int size, Long id) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        List<Book>userOrderedList=this.userOrderedBooks.getAllBooksOrderedUser(user);
+        return Page.slice(userOrderedList,page,size);
+    }
+
+    @Override
+    public Page<Book> getAllFavouriteBooksUserPaginate(int page, int size, Long id) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        List<Book>userFavouriteList=this.userFavouriteBooksRepository.getAllBooksFavouriteByUser(user);
+
+        return Page.slice(userFavouriteList,page,size);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {

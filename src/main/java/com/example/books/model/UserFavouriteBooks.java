@@ -12,22 +12,19 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class userOrdered {
-
+public class UserFavouriteBooks {
     @EmbeddedId
-    userOrderedBooksKey id;
+    UserFavouriteBooksKey id;
 
     @ManyToOne
-    @MapsId("all_ordered_books_user")
-    @JoinColumn(name = "all_ordered_books_user")
+    @MapsId("user_favourite_book_id")
+    @JoinColumn(name = "user_favourite_book_id")
     User user;
 
     @ManyToOne
-    @MapsId("ordered_books")
-    @JoinColumn(name = "ordered_books")
+    @MapsId("book_favourite_name")
+    @JoinColumn(name = "book_favourite_name")
     Book book;
 
-    int status;
-
-    int isInRequests;
+    int isOrdered;
 }
