@@ -2,6 +2,7 @@ package com.example.books.repository.jpa;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.User;
 import com.example.books.model.UserFavouriteBooks;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,12 +23,18 @@ public interface BookJpaRepository extends JpaRepository<Book,String> {
     @Query("select count(b.name) from Book b where b.name like :userName group by b.name")
     Long findAnotherSameUserName(String userName);
 
-    @Query("select b from Book b join b.author author where author.isDeleted like 0")
+    @Query("select b from Book b join b.author author where author.isDeleted like 0 and b.isDeleted=0")
     List<Book> findAllAuthors();
 
     @Query("select b.author from Book b where b.name like :name")
     Author getAuthorByBook(String name);
 
-    @Query("select b from Book b left join UserFavouriteBooks u on b like u.book")
-    List<UserFavouriteBooks> getAllBooksAuthorFavourite();
+    @Query("select u from  Book b left join UserFavouriteBooks u  on u.book like b")
+    List<UserFavouriteBooks> getAllBooksAuthorFavourite(User user);
+
+    @Query("select b from Book b where b.isDeleted=0")
+    List<Book> findAllBooks();
+
+    @Query("select b from Book b order by b.createDateTime desc")
+    List<Book> getNewestBooks();
 }

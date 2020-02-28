@@ -2,6 +2,7 @@ package com.example.books.controller;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.User;
 import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.exceptions.InvalidAuthorsId;
 import com.example.books.model.exceptions.InvalidAuthorsName;
@@ -89,10 +90,23 @@ public class RestBookController {
         this.bookService.deleteBook(name);
     }
 
-    @GetMapping("/getAllBooksAuthorFavourite")
+    @GetMapping("/getAllBooksAuthorFavourite/{id}")
     public Page<UserFavouriteBooks>getAllBooksAuthorFavourite(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
-                                                              @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size){
-        return this.bookService.getAllBooksAuthorFavourite(page,size);
+                                                              @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size,
+                                                              @PathVariable(value = "id")Long id){
+        return this.bookService.getAllBooksAuthorFavourite(page,size,id);
+    }
+
+    @GetMapping(path = "/getNewestBooks")
+    public List<Book>getNewestBooks(){
+        return this.bookService.getNewestBooks();
+    }
+
+    @GetMapping("/checkIfUserHasThisBookFav/{id}/{name}")
+    public boolean checkIfUserHasThisBookFav( @PathVariable(value = "id")Long id,
+                                       @PathVariable(value = "name")String name){
+
+        return this.bookService.checkIfUserHasThisBookFav(id,name);
     }
 
     @GetMapping(params = "name")

@@ -29,5 +29,9 @@ public interface BookService {
 
     Page<Book> searchBookOrAuthorPage(String name,int page, int pageSize);
 
-    Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size);
+    Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size,Long id);
+
+    boolean checkIfUserHasThisBookFav(Long id, String name);
+
+    List<Book> getNewestBooks();
 }

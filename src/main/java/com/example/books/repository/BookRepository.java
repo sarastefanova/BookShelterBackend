@@ -2,6 +2,7 @@ package com.example.books.repository;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.User;
 import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.paginate.Page;
 
@@ -25,5 +26,7 @@ public interface BookRepository {
 
     Author getAuthorByBook(String name);
 
-    Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size);
+    Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size, User user);
+
+    List<Book> getNewestBooks();
 }

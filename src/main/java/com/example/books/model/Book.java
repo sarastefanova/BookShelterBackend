@@ -47,6 +47,8 @@ public class Book {
             @JsonIgnore
     @NotFound(action = NotFoundAction.IGNORE)
     List<User>allOrderedBooksUser;
+
+    int isDeleted;
     public Book(String name, Author author, int price) {
         this.name = name;
         this.author = author;

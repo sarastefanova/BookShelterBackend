@@ -2,31 +2,34 @@ package com.example.books.service.impl;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.User;
 import com.example.books.model.UserFavouriteBooks;
-import com.example.books.model.exceptions.BookAlreadyExists;
-import com.example.books.model.exceptions.InvalidAuthorsId;
-import com.example.books.model.exceptions.InvalidAuthorsName;
-import com.example.books.model.exceptions.InvalidBookId;
+import com.example.books.model.exceptions.*;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.AuthorRepository;
 import com.example.books.repository.BookRepository;
+import com.example.books.repository.UserFavouriteBooksRepository;
+import com.example.books.repository.UserRepository;
 import com.example.books.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final UserRepository userRepository;
+    private final UserFavouriteBooksRepository userFavouriteBooksRepository;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, UserRepository userRepository, UserFavouriteBooksRepository userFavouriteBooksRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
+        this.userRepository = userRepository;
+        this.userFavouriteBooksRepository = userFavouriteBooksRepository;
     }
 
     @Override
@@ -56,6 +59,7 @@ public class BookServiceImpl implements BookService {
             Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
             if((this.bookRepository.findAnotherSameUserName(name))==null){
                 Book   book=new Book(name,author,price,file,shortContentBook,availability);
+                book.setIsDeleted(0);
                 return this.bookRepository.save(book);
             }
               else throw new BookAlreadyExists();
@@ -116,8 +120,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size) {
-        return this.bookRepository.getAllBooksAuthorFavourite(page,size);
+    public Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size,Long id) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        return this.bookRepository.getAllBooksAuthorFavourite(page,size,user);
+    }
+
+    @Override
+    public boolean checkIfUserHasThisBookFav(Long id, String name) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        Book book=this.bookRepository.findById(name).orElseThrow(InvalidBookId::new);
+        UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepository.findFavBookUser(user,book);
+        if(userFavouriteBooks==null)
+            return false;
+        else
+            return true;
+    }
+
+    @Override
+    public List<Book> getNewestBooks() {
+        return this.bookRepository.getNewestBooks();
     }
 
 }

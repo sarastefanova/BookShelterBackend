@@ -2,7 +2,9 @@ package com.example.books.repository.jpa;
 
 import com.example.books.model.Author;
 import com.example.books.model.Book;
+import com.example.books.model.User;
 import com.example.books.model.UserFavouriteBooks;
+import com.example.books.model.exceptions.InvalidBookId;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +27,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> getAllBooks() {
-        return this.bookJpaRepository.findAll();
+        return this.bookJpaRepository.findAllBooks();
     }
 
     @Override
@@ -51,7 +53,10 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public void deleteById(String name) {
-            this.bookJpaRepository.deleteById(name);
+         Book book=this.bookJpaRepository.findById(name).orElseThrow(InvalidBookId::new);
+         book.setIsDeleted(1);
+        //this.bookJpaRepository.deleteById(name);
+        this.bookJpaRepository.save(book);
     }
 
     @Override
@@ -88,9 +93,15 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page,int size) {
-        List<UserFavouriteBooks>getBooks=this.bookJpaRepository.getAllBooksAuthorFavourite();
+    public Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page,int size,User user) {
+
+        List<UserFavouriteBooks>getBooks=this.bookJpaRepository.getAllBooksAuthorFavourite(user);
         int i=0;
         return Page.slice(getBooks,page,size);
+    }
+
+    @Override
+    public List<Book> getNewestBooks() {
+        return this.bookJpaRepository.getNewestBooks().subList(0,3);
     }
 }
