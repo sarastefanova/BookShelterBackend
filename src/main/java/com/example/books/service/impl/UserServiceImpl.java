@@ -253,12 +253,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserFavouriteBooks addFavouriteBookForUser(User user, Book book) {
-        UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepository.findFavBookUser(user,book);
-        if(userFavouriteBooks==null){
-            UserFavouriteBooksKey key=new UserFavouriteBooksKey(user.getId(),book.getName());
-            userFavouriteBooks.setBook(book);
-            userFavouriteBooks.setId(key);
+        if(this.userFavouriteBooksRepository.findFavBookUser(user,book)==null){
+            UserFavouriteBooks userFavouriteBooks=new UserFavouriteBooks();
+            userFavouriteBooks.setId(new UserFavouriteBooksKey(user.getId(),book.getName()));
             userFavouriteBooks.setUser(user);
+            userFavouriteBooks.setBook(book);
+
             userFavouriteBooks.setIsOrdered(0);
             return this.userFavouriteBooksRepository.userFavouriteBookSave(userFavouriteBooks);
         }
