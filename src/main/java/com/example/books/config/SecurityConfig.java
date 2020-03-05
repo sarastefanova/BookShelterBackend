@@ -46,11 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     {
         http.cors().and()
                 //starts authorizing configurations.
+                .httpBasic()
+                .and()
                 .authorizeRequests()
-                //ignoring the guest's urls...
-                .antMatchers("/resources/**", "/error", "/user/**", "/books","/books/**","/author","/author/**").permitAll()
-                //authenticate all remaining URLs.
-                .anyRequest().fullyAuthenticated()
+                .antMatchers("/**","/**/*")
+                .permitAll()
+//                .antMatchers("/user/**","/user/getAllRequestsPaginate").hasRole("admin")
                 .and()
                 .logout().permitAll()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout", "POST"))

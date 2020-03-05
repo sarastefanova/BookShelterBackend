@@ -10,6 +10,7 @@ import com.example.books.repository.UserRepository;
 import com.example.books.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -76,23 +78,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-
-//    @Override
-//    public User editUser(String userName,String name, String surname, String address, String number, String password, String passwordConfirm, String email,Roles roles) {
-//        User user=this.userRepository.findByUserName(userName);
-//        user.setAddress(address);
-//        user.setEmail(email);
-//        user.setName(name);
-//        user.setSurname(surname);
-//        user.setNumber(number);
-//        user.setRoles(roles);
-//        user.setPassword(password);
-//        user.setPasswordConfirm(passwordConfirm);
-//
-//        return this.userRepository.save(user);
-//    }
-
     @Override
     public List<String> findUsers(List<Long> idList) {
         return userRepository.findByIdList(idList);
@@ -124,9 +109,6 @@ public class UserServiceImpl implements UserService {
         }
 
 
-
-
-
     }
 
     @Override
@@ -154,7 +136,7 @@ public class UserServiceImpl implements UserService {
                 user.setFile(user.getFile());
             }
 
-            return this.userRepository.save(user);
+                return this.userRepository.save(user);
         }else {
             throw new UserAlreadyExists();
         }
@@ -222,6 +204,7 @@ public class UserServiceImpl implements UserService {
         }
        throw new UserFavouriteBooksAlreadyExists();
     }
+
 
     @Override
     public List<Book> getAllRequestsOrdersStatus() {

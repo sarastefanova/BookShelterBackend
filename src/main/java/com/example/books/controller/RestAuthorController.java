@@ -65,7 +65,7 @@ public class RestAuthorController {
     }
 
 
-    @DeleteMapping(path = "deleteFlag/{nameAndSurname}")
+    @DeleteMapping(path = "/deleteFlag/{nameAndSurname}")
     public void deleteAuthor(@PathVariable String nameAndSurname,@RequestParam(value = "isDeleted") int isDeleted){
         this.authorService.deleteAuthorWithFlag(nameAndSurname,isDeleted);
     }

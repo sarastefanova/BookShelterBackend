@@ -12,6 +12,7 @@ import com.example.books.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +45,7 @@ public class RestBookController {
 
     }
 
-
+//    @PreAuthorize("hasRole('admin')")
     @PostMapping(path = "/upload")
     @ResponseStatus(HttpStatus.CREATED)
     public Book createBookImg(@RequestParam(value="name") String name,
@@ -75,6 +76,7 @@ public class RestBookController {
         return this.bookService.getAllBooksAuthor();
     }
 
+   // @PreAuthorize("hasRole('admin')")
     @PatchMapping("/{name}")
     public Book updateBook(
                            @PathVariable(value="name") String name,
@@ -84,6 +86,7 @@ public class RestBookController {
                            @RequestParam(value = "availability")int availability) throws InvalidAuthorsId, InvalidBookId, InvalidAuthorsName, IOException {
         return this.bookService.editBook(name,nameAndSurname,price,shortContentBook,availability);
     }
+
 
     @DeleteMapping("/{name}")
     public void deleteAuthor(@PathVariable String name){
