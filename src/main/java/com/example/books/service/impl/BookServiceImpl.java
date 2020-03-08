@@ -1,15 +1,10 @@
 package com.example.books.service.impl;
 
-import com.example.books.model.Author;
-import com.example.books.model.Book;
-import com.example.books.model.User;
-import com.example.books.model.UserFavouriteBooks;
+import com.example.books.model.*;
 import com.example.books.model.exceptions.*;
 import com.example.books.model.paginate.Page;
-import com.example.books.repository.AuthorRepository;
-import com.example.books.repository.BookRepository;
-import com.example.books.repository.UserFavouriteBooksRepository;
-import com.example.books.repository.UserRepository;
+import com.example.books.repository.*;
+import com.example.books.repository.jpa.BookJpaRepository;
 import com.example.books.service.BookService;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +19,16 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final UserRepository userRepository;
     private final UserFavouriteBooksRepository userFavouriteBooksRepository;
+    private final UserAllBooksWithFavRepository userAllBooksWithFavRepository;
+    private final BookJpaRepository bookJpaRepository;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, UserRepository userRepository, UserFavouriteBooksRepository userFavouriteBooksRepository) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, UserRepository userRepository, UserFavouriteBooksRepository userFavouriteBooksRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, BookJpaRepository bookJpaRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.userRepository = userRepository;
         this.userFavouriteBooksRepository = userFavouriteBooksRepository;
+        this.userAllBooksWithFavRepository = userAllBooksWithFavRepository;
+        this.bookJpaRepository = bookJpaRepository;
     }
 
     @Override
@@ -71,13 +70,27 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> getAllBooks(int page, int size) {
-        Page<Book>newBooks =this.bookRepository.getAllBooks(page,size);
-        Long i=newBooks.getContent().stream().filter(p->p.getAuthor().getIsDeleted()==1).count();
+    public Page<Book> getAllBooks(int page, int size,Long userId) {
+        if(userId==0){
+            Page<Book>newBooks =this.bookRepository.getAllBooks(page,size);
+            Long i=newBooks.getContent().stream().filter(p->p.getAuthor().getIsDeleted()==1).count();
 
 
-        return this.bookRepository.getAllBooks(page,size);
+            return this.bookRepository.getAllBooks(page,size);
+        }
+        else{
+           User user=this.userRepository.findById(userId).orElseThrow(InvalidUserId::new);
+            User findUser=this.userAllBooksWithFavRepository.findUser(user);
+            if(findUser==null){
+                List<Book>getAllBooks=this.bookJpaRepository.findAllAuthors();
+                this.userAllBooksWithFavRepository.saveAllBooks(user,getAllBooks);
+            }
+
+        }
+        return null;
     }
+
+
 
     @Override
     public Book editBook(String name, String nameAndSurname, int price,String shortContentBook,int availability) throws InvalidBookId, InvalidAuthorsName {
@@ -139,6 +152,16 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getNewestBooks() {
         return this.bookRepository.getNewestBooks();
+    }
+
+    @Override
+    public Page<UserAllBooksWithFav> getAllBooksUserWithFav(int page, int size, Long id) {
+        return this.bookRepository.getAllBooksUserWithFav(page,size,id);
+    }
+
+    @Override
+    public int getInFavouritesBook(User user, Book book) {
+        return this.userAllBooksWithFavRepository.getInFavouritesBook(user,book);
     }
 
 }

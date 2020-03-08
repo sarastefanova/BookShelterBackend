@@ -1,18 +1,14 @@
 package com.example.books.controller;
 
-import com.example.books.model.Author;
-import com.example.books.model.Book;
-import com.example.books.model.User;
-import com.example.books.model.UserFavouriteBooks;
+import com.example.books.model.*;
 import com.example.books.model.exceptions.InvalidAuthorsId;
 import com.example.books.model.exceptions.InvalidAuthorsName;
 import com.example.books.model.exceptions.InvalidBookId;
+import com.example.books.model.exceptions.InvalidUserId;
 import com.example.books.model.paginate.Page;
 import com.example.books.service.BookService;
+import com.example.books.service.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,9 +23,10 @@ import java.util.Optional;
 public class RestBookController {
 
     private final BookService bookService;
-
-    public RestBookController(BookService bookService) {
+    private final UserService userService;
+    public RestBookController(BookService bookService, UserService userService) {
         this.bookService = bookService;
+        this.userService = userService;
     }
 
     @PostMapping()
@@ -66,14 +63,30 @@ public class RestBookController {
 
     @GetMapping
     public Page<Book> getAllBooks(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
-                                              @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size) {
-        return this.bookService.getAllBooks(page, size);
+                                              @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size,
+                                  @RequestParam(value = "id",required = false,defaultValue = "null")Long id) {
+        return this.bookService.getAllBooks(page, size,id);
     }
 
     @GetMapping(path = "/getAllBooks")
     public List<Book> getAllBooksAuthor(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
                                   @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size) {
         return this.bookService.getAllBooksAuthor();
+    }
+
+    @GetMapping(path = "/getAllBooksUser")
+    public Page<UserAllBooksWithFav> getAllBooksUserWithFav(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                                            @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size,
+                                                            @RequestParam(value = "id")Long id){
+        return this.bookService.getAllBooksUserWithFav(page,size,id);
+    }
+
+    @GetMapping(path = "/getInFavouritesBook/{id}/{name}")
+    public int getInFavouritesBook(@PathVariable(value = "id")Long id,@PathVariable(value = "name")String name){
+        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
+        int i=this.bookService.getInFavouritesBook(user,book);
+        return this.bookService.getInFavouritesBook(user,book);
     }
 
    // @PreAuthorize("hasRole('admin')")

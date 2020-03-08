@@ -1,18 +1,16 @@
 package com.example.books.repository.jpa;
 
-import com.example.books.model.Author;
-import com.example.books.model.Book;
-import com.example.books.model.User;
-import com.example.books.model.UserFavouriteBooks;
+import com.example.books.model.*;
 import com.example.books.model.exceptions.InvalidBookId;
+import com.example.books.model.exceptions.InvalidUserId;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
+import com.example.books.repository.UserAllBooksWithFavRepository;
+import com.example.books.repository.UserRepository;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.expression.spel.ast.OpAnd;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,14 +18,18 @@ import java.util.Optional;
 public class BookRepositoryImpl implements BookRepository {
 
     private final BookJpaRepository bookJpaRepository;
+    private final UserAllBooksWithFavRepository userAllBooksWithFavRepository;
+    private final UserRepository userRepository;
 
-    public BookRepositoryImpl(BookJpaRepository bookJpaRepository) {
+    public BookRepositoryImpl(BookJpaRepository bookJpaRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserRepository userRepository) {
         this.bookJpaRepository = bookJpaRepository;
+        this.userAllBooksWithFavRepository = userAllBooksWithFavRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public List<Book> getAllBooks() {
-        return this.bookJpaRepository.findAllBooks();
+        return this.bookJpaRepository.findAll();
     }
 
     @Override
@@ -98,6 +100,22 @@ public class BookRepositoryImpl implements BookRepository {
         List<UserFavouriteBooks>getBooks=this.bookJpaRepository.getAllBooksAuthorFavourite(user);
         int i=0;
         return Page.slice(getBooks,page,size);
+    }
+
+    @Override
+    public Page<UserAllBooksWithFav> getAllBooksUserWithFav(int page, int size, Long id) {
+       // List<Book>newBooks=this.bookJpaRepository.findAllAuthors();//tuka gi imam site knigi
+
+        List<UserAllBooksWithFav>userAllBooksWithFavs=new ArrayList<>();
+        if(id==0){
+            userAllBooksWithFavs =this.userAllBooksWithFavRepository.getAllBooks();
+
+        }else {
+            User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+            userAllBooksWithFavs=this.userAllBooksWithFavRepository.getAllBooksWithFavUser(user);
+        }
+        return Page.slice(userAllBooksWithFavs,page,size);
+
     }
 
     @Override

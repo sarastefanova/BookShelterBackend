@@ -37,4 +37,7 @@ public interface BookJpaRepository extends JpaRepository<Book,String> {
 
     @Query("select b from Book b order by b.createDateTime desc")
     List<Book> getNewestBooks();
+
+
+
 }

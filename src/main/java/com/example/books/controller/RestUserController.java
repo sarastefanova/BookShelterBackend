@@ -186,14 +186,14 @@ public class RestUserController {
     public User user(@PathVariable(value="id") Long id,
                      @PathVariable(value = "name")String name){
         User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
-        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-        List<Book>allBooksLiked=user.getLikedBooks();
-
-        if(allBooksLiked.contains(book)){
-            throw   new ListContainsBook();
-        }
-        allBooksLiked.add(book);
-        user.setLikedBooks(allBooksLiked);
+//        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+//        List<Book>allBooksLiked=user.getLikedBooks();
+//
+//        if(allBooksLiked.contains(book)){
+//            throw   new ListContainsBook();
+//        }
+//        allBooksLiked.add(book);
+//        user.setLikedBooks(allBooksLiked);
 
 
 
@@ -223,14 +223,14 @@ public class RestUserController {
     public User addOrder(@PathVariable(value="id") Long id,
                      @PathVariable(value = "name")String name){
         User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
-        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-        List<Book>allBooksOrdered=user.getOrderedBooks();
-
-        if(allBooksOrdered.contains(book)){
-            throw   new ListContainsBook();
-        }
-        allBooksOrdered.add(book);
-        user.setOrderedBooks(allBooksOrdered);
+//        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
+//        List<Book>allBooksOrdered=user.getOrderedBooks();
+//
+//        if(allBooksOrdered.contains(book)){
+//            throw   new ListContainsBook();
+//        }
+//        allBooksOrdered.add(book);
+//        user.setOrderedBooks(allBooksOrdered);
 
         return this.userService.addFavouriteBook(user);
     }
@@ -300,6 +300,7 @@ public class RestUserController {
         }
         String username = principal.getName();
         int i=0;
+
         return ResponseEntity.ok(userService.getByUserName(principal.getName()));
     }
 

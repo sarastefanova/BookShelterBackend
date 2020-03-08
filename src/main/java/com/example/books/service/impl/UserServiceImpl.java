@@ -3,14 +3,10 @@ package com.example.books.service.impl;
 import com.example.books.model.*;
 import com.example.books.model.exceptions.*;
 import com.example.books.model.paginate.Page;
-import com.example.books.repository.BookRepository;
-import com.example.books.repository.UserFavouriteBooksRepository;
-import com.example.books.repository.UserOrderedBooks;
-import com.example.books.repository.UserRepository;
+import com.example.books.repository.*;
 import com.example.books.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
-
+    private final UserAllBooksWithFavRepository userAllBooksWithFavRepository;
     private final UserOrderedBooks userOrderedBooks;
 
     private final UserFavouriteBooksRepository userFavouriteBooksRepository;
@@ -37,9 +33,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, BookRepository bookRepository, UserOrderedBooks userOrderedBooks, UserFavouriteBooksRepository userFavouriteBooksRepository) {
+    public UserServiceImpl(UserRepository userRepository, BookRepository bookRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserOrderedBooks userOrderedBooks, UserFavouriteBooksRepository userFavouriteBooksRepository) {
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.userAllBooksWithFavRepository = userAllBooksWithFavRepository;
 
 
         this.userOrderedBooks = userOrderedBooks;
@@ -154,12 +151,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteFavBook(Long id, Book book) {
         User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
-        List<Book>allBooksLiked=user.getLikedBooks();
-        if(allBooksLiked.contains(book)){
-            allBooksLiked.remove(book);
-        }
-        user.setLikedBooks(allBooksLiked);
-        this.userRepository.save(user);
+//        List<Book>allBooksLiked=user.getLikedBooks();
+//        if(allBooksLiked.contains(book)){
+//            allBooksLiked.remove(book);
+//        }
+//        user.setLikedBooks(allBooksLiked);
+//        this.userRepository.save(user);
 
     }
 
@@ -175,11 +172,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteOrderedBook(Long id, Book book) {
-        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
-        List<Book>allBooksOrdered=user.getOrderedBooks();
-        allBooksOrdered.remove(book);
-        user.setOrderedBooks(allBooksOrdered);
-        this.userRepository.save(user);
+//        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+//        List<Book>allBooksOrdered=user.getOrderedBooks();
+//        allBooksOrdered.remove(book);
+//        user.setOrderedBooks(allBooksOrdered);
+//        this.userRepository.save(user);
     }
 
     @Override
@@ -200,6 +197,7 @@ public class UserServiceImpl implements UserService {
             UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepository.findFavBookUser(user,book);
             userFavouriteBooks.setIsOrdered(1);
             this.userFavouriteBooksRepository.userFavouriteBookUpdate(userFavouriteBooks);
+
             return this.userOrderedBooks.userOrderedSave(userOrdered);
         }
        throw new UserFavouriteBooksAlreadyExists();
@@ -243,6 +241,9 @@ public class UserServiceImpl implements UserService {
             userFavouriteBooks.setBook(book);
 
             userFavouriteBooks.setIsOrdered(0);
+            UserAllBooksWithFav userAllBooksWithFav=this.userAllBooksWithFavRepository.findById(user,book).orElseThrow(InvalidAuthorsId::new);
+            userAllBooksWithFav.setInFavourite(1);
+            this.userAllBooksWithFavRepository.save(userAllBooksWithFav);
             return this.userFavouriteBooksRepository.userFavouriteBookSave(userFavouriteBooks);
         }
         throw new UserFavouriteBooksAlreadyExists();

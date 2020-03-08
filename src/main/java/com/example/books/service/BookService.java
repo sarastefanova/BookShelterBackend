@@ -1,8 +1,6 @@
 package com.example.books.service;
 
-import com.example.books.model.Author;
-import com.example.books.model.Book;
-import com.example.books.model.UserFavouriteBooks;
+import com.example.books.model.*;
 import com.example.books.model.exceptions.InvalidAuthorsName;
 import com.example.books.model.exceptions.InvalidBookId;
 import com.example.books.model.paginate.Page;
@@ -18,7 +16,7 @@ public interface BookService {
     Book createBook(String name, String nameAndSurname, int price) throws InvalidAuthorsName;
     Book createBookWithImg(String name, String nameAndSurname, int price,byte[] file,String shortContentBook,int availability) throws InvalidAuthorsName, IOException;
     void deleteBook(String name);
-    Page<Book> getAllBooks(int page, int size);
+    Page<Book> getAllBooks(int page, int size,Long userId);
     Book editBook(String name, String nameAndSurname, int price,String shortContentBook,int availability) throws InvalidBookId, InvalidAuthorsName;
     List<Book>getAllBookByAuthor(String nameAndSurname);
     List<Book> getAllBooksAuthor();
@@ -34,4 +32,8 @@ public interface BookService {
     boolean checkIfUserHasThisBookFav(Long id, String name);
 
     List<Book> getNewestBooks();
+
+    Page<UserAllBooksWithFav> getAllBooksUserWithFav(int page, int size, Long id);
+
+    int getInFavouritesBook(User user, Book book);
 }
