@@ -25,7 +25,7 @@ public interface BookService {
 
     Author getAuthorByBook(String name);
 
-    Page<Book> searchBookOrAuthorPage(String name,int page, int pageSize);
+    Page<UserAllBooksWithFav> searchBookOrAuthorPage(String name,int page, int pageSize);
 
     Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size,Long id);
 

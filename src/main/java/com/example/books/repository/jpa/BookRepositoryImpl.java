@@ -108,7 +108,8 @@ public class BookRepositoryImpl implements BookRepository {
 
         List<UserAllBooksWithFav>userAllBooksWithFavs=new ArrayList<>();
         if(id==0){
-            userAllBooksWithFavs =this.userAllBooksWithFavRepository.getAllBooks();
+            User user =this.userAllBooksWithFavRepository.getAllBooks().get(0).getUser();
+            userAllBooksWithFavs=this.userAllBooksWithFavRepository.getAllBooksWithFavUser(user);
 
         }else {
             User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);

@@ -19,4 +19,14 @@ public interface UserAllBooksWithFavJpaRepository extends JpaRepository<UserAllB
 
     @Query("select u.user from UserAllBooksWithFav u where u.user like :user")
     User findUser(User user);
+
+   // select b from Book b join b.author author where author.isDeleted like 0 and b.isDeleted=0
+    @Query("select distinct u from UserAllBooksWithFav u join Book b on u.book like b")
+    List<UserAllBooksWithFav> findAllBooks();
+
+    @Query("select u from UserAllBooksWithFav u where u.book like :book and u.user like :user")
+    List<UserAllBooksWithFav> searchBookOrAuthor(Book book,User user);
+
+    @Query("select u.user from UserAllBooksWithFav u")
+    List<User> listAllUserFavBooks();
 }

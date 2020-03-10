@@ -22,7 +22,7 @@ public class UserAllBooksWithFavRepositoryImpl implements UserAllBooksWithFavRep
 
     @Override
     public List<UserAllBooksWithFav> getAllBooks() {
-        return this.userAllBooksWithFavJpaRepository.findAll();
+        return this.userAllBooksWithFavJpaRepository.findAllBooks();
     }
 
     @Override
@@ -76,5 +76,24 @@ public class UserAllBooksWithFavRepositoryImpl implements UserAllBooksWithFavRep
     @Override
     public User findUser(User user) {
         return this.userAllBooksWithFavJpaRepository.findUser(user);
+    }
+
+    @Override
+    public List<UserAllBooksWithFav> searchBookOrAuthor(Book book,User user) {
+        return this.userAllBooksWithFavJpaRepository.searchBookOrAuthor(book,user);
+    }
+
+    @Override
+    public void saveBookForEachUser(Book book) {
+        List<User> listAllUserFavBooks=this.userAllBooksWithFavJpaRepository.listAllUserFavBooks();
+
+        for (User u:listAllUserFavBooks) {
+            UserAllBooksWithFavKey userAllBooksWithFavKey=new UserAllBooksWithFavKey(u.getId(),book.getName());
+            UserAllBooksWithFav userAllBooksWithFav=new UserAllBooksWithFav();
+            userAllBooksWithFav.setId(userAllBooksWithFavKey);
+            userAllBooksWithFav.setBook(book);
+            userAllBooksWithFav.setUser(u);
+            this.userAllBooksWithFavJpaRepository.save(userAllBooksWithFav);
+        }
     }
 }

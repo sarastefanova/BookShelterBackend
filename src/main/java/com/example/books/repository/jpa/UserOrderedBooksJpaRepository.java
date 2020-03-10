@@ -6,7 +6,6 @@ import com.example.books.model.userOrdered;
 import com.example.books.model.userOrderedBooksKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -31,4 +30,7 @@ public interface UserOrderedBooksJpaRepository extends JpaRepository<userOrdered
 
     @Query("select  distinct  u from userOrdered u where u.isInRequests=0")
     List<userOrdered> getAllRequests();
+
+    @Query("select  u from userOrdered u where u.book like :book and u.user like :user")
+    userOrdered findByIdOrdered(User user, Book book);
 }

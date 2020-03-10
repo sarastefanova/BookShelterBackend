@@ -103,6 +103,7 @@ public class RestBookController {
 
     @DeleteMapping("/{name}")
     public void deleteAuthor(@PathVariable String name){
+
         this.bookService.deleteBook(name);
     }
 
@@ -136,7 +137,7 @@ public class RestBookController {
     }
 
     @GetMapping(path = "/searchBookPage",params = "name")
-    public Page<Book> searchBookOrAuthorPage(@RequestParam String name,@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+    public Page<UserAllBooksWithFav> searchBookOrAuthorPage(@RequestParam String name,@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
                                              @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size){
 
         return bookService.searchBookOrAuthorPage(name,page,size);

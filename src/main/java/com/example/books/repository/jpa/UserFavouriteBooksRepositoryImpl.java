@@ -56,14 +56,14 @@ public class UserFavouriteBooksRepositoryImpl  implements UserFavouriteBooksRepo
 
     @Override
     public UserFavouriteBooks userFavouriteBookUpdate(UserFavouriteBooks userFavouriteBooks) {
-        UserFavouriteBooks userFavourite=this.findById(userFavouriteBooks.getId()).orElseThrow(InvalidFavouriteBookId::new);
-
+        UserFavouriteBooks userFavourite=this.userFavouriteBooksRepositoryJpa.findByIdBook(userFavouriteBooks.getUser(),userFavouriteBooks.getBook());
+        int i=0;
         return this.userFavouriteBooksRepositoryJpa.save(userFavourite);
     }
 
     @Override
     public void deleteFavouriteBook(User user, Book book) {
-            UserFavouriteBooks userFavouriteBooks=this.findById(new UserFavouriteBooksKey(user.getId(),book.getName())).orElseThrow(InvalidFavouriteBookId::new);
+            UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepositoryJpa.findByIdBook(user,book);
             this.userFavouriteBooksRepositoryJpa.delete(userFavouriteBooks);
 
     }

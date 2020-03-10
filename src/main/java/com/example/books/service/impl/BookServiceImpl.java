@@ -9,8 +9,11 @@ import com.example.books.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -33,6 +36,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> listBooks() {
+
         return this.bookRepository.getAllBooks();
     }
 
@@ -59,7 +63,10 @@ public class BookServiceImpl implements BookService {
             if((this.bookRepository.findAnotherSameUserName(name))==null){
                 Book   book=new Book(name,author,price,file,shortContentBook,availability);
                 book.setIsDeleted(0);
-                return this.bookRepository.save(book);
+
+                 Book newBook=this.bookRepository.save(book);
+                this.userAllBooksWithFavRepository.saveBookForEachUser(book);
+                return  newBook;
             }
               else throw new BookAlreadyExists();
     }
@@ -81,7 +88,8 @@ public class BookServiceImpl implements BookService {
         else{
            User user=this.userRepository.findById(userId).orElseThrow(InvalidUserId::new);
             User findUser=this.userAllBooksWithFavRepository.findUser(user);
-            if(findUser==null){
+            int pom=0;
+             if(findUser==null){
                 List<Book>getAllBooks=this.bookJpaRepository.findAllAuthors();
                 this.userAllBooksWithFavRepository.saveAllBooks(user,getAllBooks);
             }
@@ -127,9 +135,15 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<Book> searchBookOrAuthorPage(String name,int page, int pageSize) {
-        List<Book>books=this.bookRepository.searchBookOrAuthor(name);
-        return Page.slice(books,page,pageSize);
+    public Page<UserAllBooksWithFav> searchBookOrAuthorPage(String name,int page, int pageSize) {
+        Book books=this.bookRepository.searchBookOrAuthor(name).get(0);
+        User user=this.userRepository.findByUserName("stefanovaAdmin");
+        List<UserAllBooksWithFav> userAllBooksWithFavs=new ArrayList<>();
+        userAllBooksWithFavs=this.userAllBooksWithFavRepository.searchBookOrAuthor(books,user);
+//        List<UserAllBooksWithFav>getOneBookUserAll=new ArrayList<>();
+//        getOneBookUserAll.add(userAllBooksWithFavs.get(0));
+        int i=0;
+        return Page.slice(userAllBooksWithFavs,page,pageSize);
     }
 
     @Override

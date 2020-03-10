@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface UserOrderedBooks{
 
     userOrdered userOrderedSave(userOrdered userOrdered);
+    userOrdered findByIdOrdered(User user, Book book);
     List<Book> getAllOrders();
     List<Book> getAllBooksOrderedUser(User user);
     Optional<userOrdered>findById(userOrderedBooksKey userOrderedKey);

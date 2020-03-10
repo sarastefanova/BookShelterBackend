@@ -49,8 +49,12 @@ public class UserOrderedBooksRepositoryImpl implements UserOrderedBooks {
 
     @Override
     public void deleteOrder(User user, Book book) {
-        userOrdered userOrdered=this.findById(new userOrderedBooksKey(user.getId(),book.getName())).orElseThrow(InvalidBookOrderKye::new);
+        userOrdered userOrdered=this.findByIdOrdered(user,book);
         this.userOrderedBooksJpaRepository.delete(userOrdered);
+    }
+
+    public userOrdered findByIdOrdered(User user, Book book) {
+      return   this.userOrderedBooksJpaRepository.findByIdOrdered(user,book);
     }
 
     @Override

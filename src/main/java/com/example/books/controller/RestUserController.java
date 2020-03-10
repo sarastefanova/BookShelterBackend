@@ -95,6 +95,7 @@ public class RestUserController {
 
     @GetMapping(path = "/getAllRequestsOrdersStatus")//kje go koristeme ovaa veke za status plus da imame na narackata
     public List<Book> getAllRequestsOrdersStatus(){
+
         return this.userService.getAllRequestsOrdersStatus();
     }
 

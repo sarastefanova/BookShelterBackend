@@ -253,6 +253,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteFavouriteBookUser(Long id, Book book) {
         User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+
+        UserAllBooksWithFav userAllBooksWithFav=this.userAllBooksWithFavRepository.findById(user,book).orElseThrow(InvalidFavouriteBookId::new);
+        userAllBooksWithFav.setInFavourite(0);
+
+        userOrdered userOrderedBooks=this.userOrderedBooks.findUserOrder(user,book);
+//        userOrderedBooks.setIsInRequests(0);
+//        this.userOrderedBooks.userOrderedSave(userOrderedBooks);
+        if(userOrderedBooks!=null){
+            this.userOrderedBooks.deleteOrder(user,book);
+        }
+
+
+        this.userAllBooksWithFavRepository.save(userAllBooksWithFav);
         this.userFavouriteBooksRepository.deleteFavouriteBook(user,book);
     }
 

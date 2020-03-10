@@ -24,4 +24,8 @@ public interface UserAllBooksWithFavRepository {
     int getInFavouritesBook(User user, Book book);
 
     User findUser(User user);
+
+    List<UserAllBooksWithFav> searchBookOrAuthor(Book book,User user);
+
+    void saveBookForEachUser(Book book);
 }

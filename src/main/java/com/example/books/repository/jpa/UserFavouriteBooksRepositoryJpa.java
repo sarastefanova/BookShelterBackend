@@ -22,4 +22,7 @@ public interface UserFavouriteBooksRepositoryJpa extends JpaRepository<UserFavou
 
     @Query("select b from UserFavouriteBooks b where b.book like :book and b.user like :user")
     UserFavouriteBooks findFavBookUser(User user, Book book);
+
+    @Query("select u from UserFavouriteBooks u where u.book like :book and u.user like :user")
+    UserFavouriteBooks findByIdBook(User user, Book book);
 }
