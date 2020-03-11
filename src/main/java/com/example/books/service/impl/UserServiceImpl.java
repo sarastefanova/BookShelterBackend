@@ -143,10 +143,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public List<Book> allFavouriteBooksOfUser(Long id) {
-        return this.userRepository.allFavouriteBooksOfUser(id);
-    }
 
     @Override
     public void deleteFavBook(Long id, Book book) {
@@ -165,10 +161,7 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.save(user);
     }
 
-    @Override
-    public List<Book> allBooksOrdered(Long id) {
-        return this.userRepository.allBooksOrdered(id);
-    }
+
 
     @Override
     public void deleteOrderedBook(Long id, Book book) {
@@ -179,10 +172,6 @@ public class UserServiceImpl implements UserService {
 //        this.userRepository.save(user);
     }
 
-    @Override
-    public List<Book> getAllRequestsOrders() {
-        return this.userRepository.getAllRequestsOrders();
-    }
 
     @Override
     public userOrdered addFavouriteBookStatus(User user, Book book) {

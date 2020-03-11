@@ -46,13 +46,13 @@ public class User implements UserDetails {
     @ManyToOne
     Roles roles;
 
-    @ManyToMany
-            @JsonIgnore
-    List<Book>likedBooks;
-
-    @ManyToMany
-    @JsonIgnore
-    List<Book>orderedBooks;
+//    @ManyToMany
+//            @JsonIgnore
+//    List<Book>likedBooks;
+//
+//    @ManyToMany
+//    @JsonIgnore
+//    List<Book>orderedBooks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

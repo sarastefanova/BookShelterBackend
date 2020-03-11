@@ -11,21 +11,21 @@ import java.util.Optional;
 
 public interface BookService {
 
-    List<Book> listBooks();
+
     Optional<Book> getById(String name);
-    Book createBook(String name, String nameAndSurname, int price) throws InvalidAuthorsName;
+
     Book createBookWithImg(String name, String nameAndSurname, int price,byte[] file,String shortContentBook,int availability) throws InvalidAuthorsName, IOException;
     void deleteBook(String name);
     Page<Book> getAllBooks(int page, int size,Long userId);
     Book editBook(String name, String nameAndSurname, int price,String shortContentBook,int availability) throws InvalidBookId, InvalidAuthorsName;
     List<Book>getAllBookByAuthor(String nameAndSurname);
     List<Book> getAllBooksAuthor();
-    List<Book> searchBookOrAuthor(String name);
+
 
 
     Author getAuthorByBook(String name);
 
-    Page<UserAllBooksWithFav> searchBookOrAuthorPage(String name,int page, int pageSize);
+    Page<UserAllBooksWithFav> searchBookPage(String name,int page, int pageSize);
 
     Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page, int size,Long id);
 

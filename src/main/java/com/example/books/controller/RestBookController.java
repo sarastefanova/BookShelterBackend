@@ -29,18 +29,7 @@ public class RestBookController {
         this.userService = userService;
     }
 
-    @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public Book createBook(@RequestParam(value="name") String name,
-                             @RequestParam(value="nameAndSurname") String nameAndSurname,
-                             @RequestParam(value="price") String price) throws InvalidAuthorsName, IOException {
 
-
-            int priceBook=Integer.parseInt(price);
-            return this.bookService.createBook(name,nameAndSurname,priceBook);
-
-
-    }
 
 //    @PreAuthorize("hasRole('admin')")
     @PostMapping(path = "/upload")
@@ -102,17 +91,11 @@ public class RestBookController {
 
 
     @DeleteMapping("/{name}")
-    public void deleteAuthor(@PathVariable String name){
+    public void deleteBook(@PathVariable String name){
 
         this.bookService.deleteBook(name);
     }
 
-    @GetMapping("/getAllBooksAuthorFavourite/{id}")
-    public Page<UserFavouriteBooks>getAllBooksAuthorFavourite(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
-                                                              @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size,
-                                                              @PathVariable(value = "id")Long id){
-        return this.bookService.getAllBooksAuthorFavourite(page,size,id);
-    }
 
     @GetMapping(path = "/getNewestBooks")
     public List<Book>getNewestBooks(){
@@ -131,16 +114,13 @@ public class RestBookController {
         return bookService.getById(name);
     }
 
-    @GetMapping(path = "/searchBook",params = "name")
-    public List<Book> searchBookOrAuthor(@RequestParam String name){
-        return bookService.searchBookOrAuthor(name);
-    }
+
 
     @GetMapping(path = "/searchBookPage",params = "name")
-    public Page<UserAllBooksWithFav> searchBookOrAuthorPage(@RequestParam String name,@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+    public Page<UserAllBooksWithFav> searchBookPage(@RequestParam String name,@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
                                              @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size){
 
-        return bookService.searchBookOrAuthorPage(name,page,size);
+        return bookService.searchBookPage(name,page,size);
     }
 
 

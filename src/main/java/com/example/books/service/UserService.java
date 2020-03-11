@@ -24,17 +24,17 @@ public interface UserService extends UserDetailsService {
     long findAnotherSameUserName(String userName,Long id);
     User editUserImg(Long id,String userName,String name, String surname, String address, String number, String email,byte[] file);
 
-    List<Book> allFavouriteBooksOfUser(Long id);
+
 
     void deleteFavBook(Long id, Book book);
 
     User addFavouriteBook(User user);
 
-    List<Book> allBooksOrdered(Long id);
+
 
     void deleteOrderedBook(Long id, Book book);
 
-    List<Book> getAllRequestsOrders();
+
 
     userOrdered addFavouriteBookStatus(User user, Book book);
 

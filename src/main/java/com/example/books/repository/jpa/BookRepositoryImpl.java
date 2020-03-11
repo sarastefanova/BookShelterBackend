@@ -66,10 +66,7 @@ public class BookRepositoryImpl implements BookRepository {
         return this.bookJpaRepository.getAllBookByAuthor(nameAndSurname);
     }
 
-    @Override
-    public Book checkIfBookExists(String name) {
-        return this.bookJpaRepository.checkIfBookExists(name);
-    }
+
 
     @Override
     public List<Book> searchBookOrAuthor(String name) {

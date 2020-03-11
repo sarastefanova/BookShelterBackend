@@ -14,7 +14,7 @@ public interface BookRepository {
     Book save(Book book);
     void deleteById(String name);
     List<Book>getAllBookByAuthor(String nameAndSurname);
-    Book checkIfBookExists(String name);
+
 
     List<Book> searchBookOrAuthor(String name);
     Long findAnotherSameUserName(String userName);

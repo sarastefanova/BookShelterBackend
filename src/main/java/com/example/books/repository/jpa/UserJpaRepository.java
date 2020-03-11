@@ -20,12 +20,8 @@ public interface UserJpaRepository extends JpaRepository<User,Long> {
      @Query("select count(u.userName) from User u where u.userName like :userName and u.id not like :id group by u.userName")
     Long findAnotherSameUserName(String userName,Long id);
 
-     @Query("select distinct u.likedBooks from User u join u.likedBooks likedBooks where u.id like :id")
-    List<Book> allFavouriteBooksOfUser(Long id);
 
-    @Query("select distinct u.orderedBooks from User u join u.orderedBooks orderedBooks where u.id like :id")
-    List<Book> allBooksOrdered(Long id);
 
-    @Query("select distinct u.orderedBooks from User u join u.orderedBooks orderedBooks")
-    List<Book> getAllRequestsOrders();
+
+
 }

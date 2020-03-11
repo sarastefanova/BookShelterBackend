@@ -34,27 +34,14 @@ public class BookServiceImpl implements BookService {
         this.bookJpaRepository = bookJpaRepository;
     }
 
-    @Override
-    public List<Book> listBooks() {
 
-        return this.bookRepository.getAllBooks();
-    }
 
     @Override
     public Optional<Book> getById(String name) {
         return this.bookRepository.findById(name);
     }
 
-    @Override
-    public Book createBook(String name, String nameAndSurname, int price) throws InvalidAuthorsName{
 
-
-            Author author=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
-
-               Book book=new Book(name,author,price);
-
-                return this.bookRepository.save(book);
-    }
 
     @Override
     public Book createBookWithImg(String name, String nameAndSurname, int price, byte[] file,String shortContentBook,int availability) throws InvalidAuthorsName, IOException {
@@ -124,10 +111,7 @@ public class BookServiceImpl implements BookService {
         return this.bookRepository.getAllBooksAuthor();
     }
 
-    @Override
-    public List<Book> searchBookOrAuthor(String name) {
-        return this.bookRepository.searchBookOrAuthor(name);
-    }
+
 
     @Override
     public Author getAuthorByBook(String name) {
@@ -135,7 +119,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<UserAllBooksWithFav> searchBookOrAuthorPage(String name,int page, int pageSize) {
+    public Page<UserAllBooksWithFav> searchBookPage(String name,int page, int pageSize) {
         Book books=this.bookRepository.searchBookOrAuthor(name).get(0);
         User user=this.userRepository.findByUserName("stefanovaAdmin");
         List<UserAllBooksWithFav> userAllBooksWithFavs=new ArrayList<>();

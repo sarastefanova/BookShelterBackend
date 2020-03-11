@@ -17,9 +17,5 @@ public interface UserRepository {
 
     Long findAnotherSameUserName(String userName,Long id);
 
-    List<Book> allFavouriteBooksOfUser(Long id);
 
-    List<Book> allBooksOrdered(Long id);
-
-    List<Book> getAllRequestsOrders();
 }

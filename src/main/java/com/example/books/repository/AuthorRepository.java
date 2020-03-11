@@ -9,15 +9,15 @@ import java.util.Optional;
 public interface AuthorRepository {
 
     Author save(Author author);
-    void deleteAuthor(String nameAndSurname);
+
     Optional<Author> findById(String nameAndSurname);
-    List<Author> getAllAuthors();
+
 
     List<String> getAllNamesOfAuthors();
-    Author checkArturName(String authorName);
+
     Long findAnotherSameAuthor(String userName);
 
-    List<Author> getAllAuthorsFlag();
+
 
     String getAuthorName(String nameAndSurname);
 

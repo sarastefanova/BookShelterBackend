@@ -38,15 +38,7 @@ public class Book {
 
     int availability;
 
-    @ManyToMany(mappedBy = "likedBooks")
-            @JsonIgnore
-    @NotFound(action = NotFoundAction.IGNORE)
-    List<User> allUsersLiked;
 
-    @ManyToMany(mappedBy = "orderedBooks")
-            @JsonIgnore
-    @NotFound(action = NotFoundAction.IGNORE)
-    List<User>allOrderedBooksUser;
 
     int isDeleted;
     public Book(String name, Author author, int price) {

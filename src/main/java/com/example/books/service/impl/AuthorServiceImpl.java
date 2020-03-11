@@ -20,26 +20,13 @@ public class AuthorServiceImpl implements AuthorService {
         this.authorRepository = authorRepository;
     }
 
-    @Override
-    public List<Author> listAuthors() {
-        return this.authorRepository.getAllAuthorsFlag();
-    }
+
 
     @Override
     public Optional<Author> getById(String nameAndSurname) {
         return this.authorRepository.findById(nameAndSurname);
     }
 
-    @Override
-    public Author createAuthor(String nameAndSurname, String shortAuthorBiography){
-
-        if((this.authorRepository.findAnotherSameAuthor(nameAndSurname))==null){
-            Author  author=new Author(nameAndSurname,shortAuthorBiography);
-            return this.authorRepository.save(author);
-        }
-        else throw new InvalidAuthorsId();
-
-    }
 
     @Override
     public Author createAuthorImg(String nameAndSurname, String shortAuthorBiography, byte[] file)  {
@@ -51,10 +38,7 @@ public class AuthorServiceImpl implements AuthorService {
         else throw new InvalidAuthorsId();
     }
 
-    @Override
-    public void deleteAuthor(String nameAndSurname) {
-            this.authorRepository.deleteAuthor(nameAndSurname);
-    }
+
 
     @Override
     public void deleteAuthorWithFlag(String nameAndSurname,int isDeleted) {

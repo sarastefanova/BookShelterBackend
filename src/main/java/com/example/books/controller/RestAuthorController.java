@@ -27,18 +27,7 @@ public class RestAuthorController {
     }
 
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Author createAuthor(@RequestParam(value="nameAndSurname") String nameAndSurname,
-                               @RequestParam(value="shortAuthorBiography") String shortAuthorBiography) {
 
-        try {
-            return this.authorService.createAuthor(nameAndSurname,shortAuthorBiography);
-        } catch (AuthorAlreadyExists authorAlreadyExists) {
-            authorAlreadyExists.getMessage();
-        }
-        return null;
-    }
 
 
     @PostMapping(path = "/addAuthor")
@@ -59,10 +48,6 @@ public class RestAuthorController {
        return this.authorService.editAuthor(nameAndSurname,shortAuthorBiography);
     }
 
-    @DeleteMapping("/{nameAndSurname}")
-    public void deleteAuthor(@PathVariable String nameAndSurname){
-        this.authorService.deleteAuthor(nameAndSurname);
-    }
 
 
     @DeleteMapping(path = "/deleteFlag/{nameAndSurname}")
@@ -72,10 +57,7 @@ public class RestAuthorController {
 
 
 
-    @GetMapping
-    public List<Author> getAllAuthors(){
-        return this.authorService.listAuthors();
-    }
+
 
 
 

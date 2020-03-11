@@ -44,15 +44,9 @@ public class RestUserController {
                 return userService.findById(id);
     }
 
-    @GetMapping(path = "/allFavouriteBooksOfUser/{id}")
-    public List<Book> allBooks(@PathVariable(value = "id")Long id){
-        return this.userService.allFavouriteBooksOfUser(id);
-    }
 
-    @GetMapping(path = "/allOrderedBooks/{id}")
-    public List<Book> allBooksOrdered(@PathVariable(value = "id")Long id){
-        return this.userService.allBooksOrdered(id);
-    }
+
+
 
     @GetMapping(path = "/allOrderedBooksStatus/{id}")
     public List<Book> allBooksOrderedStatus(@PathVariable(value = "id")Long id){
@@ -88,10 +82,7 @@ public class RestUserController {
     }
 
 
-    @GetMapping(path = "/getAllRequestsOrders")
-    public List<Book> getAllRequestsOrders(){
-        return this.userService.getAllRequestsOrders();
-    }
+
 
     @GetMapping(path = "/getAllRequestsOrdersStatus")//kje go koristeme ovaa veke za status plus da imame na narackata
     public List<Book> getAllRequestsOrdersStatus(){

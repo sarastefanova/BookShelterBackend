@@ -23,40 +23,28 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         return this.authorJpaRepository.save(author);
     }
 
-    @Override
-    public void deleteAuthor(String nameAndSurname) {
-        this.authorJpaRepository.deleteById(nameAndSurname);
-    }
+
 
     @Override
     public Optional<Author> findById(String nameAndSurname) {
         return this.authorJpaRepository.findById(nameAndSurname);
     }
 
-    @Override
-    public List<Author> getAllAuthors() {
-        return this.authorJpaRepository.findAll();
-    }
+
 
     @Override
     public List<String> getAllNamesOfAuthors() {
         return this.authorJpaRepository.getAllNamesOfAuthors();
     }
 
-    @Override
-    public Author checkArturName(String authorName) {
-        return this.authorJpaRepository.checkArturName(authorName);
-    }
+
 
     @Override
     public Long findAnotherSameAuthor(String userName) {
         return this.authorJpaRepository.findAnotherSameAuthor(userName);
     }
 
-    @Override
-    public List<Author> getAllAuthorsFlag() {
-        return this.authorJpaRepository.getAllAuthorsFlag();
-    }
+
 
     @Override
     public String getAuthorName(String nameAndSurname) {
