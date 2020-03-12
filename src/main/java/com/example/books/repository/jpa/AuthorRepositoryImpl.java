@@ -44,6 +44,10 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         return this.authorJpaRepository.findAnotherSameAuthor(userName);
     }
 
+    @Override
+    public List<Author> getAllAuthorsFlag() {
+        return this.authorJpaRepository.getAllAuthorsFlag();
+    }
 
 
     @Override

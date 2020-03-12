@@ -32,7 +32,7 @@ public class DataHolder {
 
     @PostConstruct
     public void init(){
-        Roles role=new Roles();
+//        Roles role=new Roles();
 //        role.setRole("admin");
 //
 //        roles.add(role);
@@ -53,6 +53,6 @@ public class DataHolder {
 //        user.setAddress("Blagoja Strackov 6");
 //        role=rolesRepository.checkIfExcistRole("admin");
 //        user.setRoles(role);
-//        this.userJpaRepository.save(user);
+        //this.userJpaRepository.save(user);
     }
 }

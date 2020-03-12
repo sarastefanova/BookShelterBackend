@@ -4,6 +4,7 @@ import com.example.books.model.*;
 import com.example.books.model.exceptions.*;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.*;
+import com.example.books.repository.jpa.UserAllBooksWithFavJpaRepository;
 import com.example.books.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserAllBooksWithFavRepository userAllBooksWithFavRepository;
     private final UserOrderedBooks userOrderedBooks;
 
+
     private final UserFavouriteBooksRepository userFavouriteBooksRepository;
 
     @Autowired
@@ -33,13 +35,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, BookRepository bookRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserOrderedBooks userOrderedBooks, UserFavouriteBooksRepository userFavouriteBooksRepository) {
+    public UserServiceImpl(UserRepository userRepository, BookRepository bookRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserOrderedBooks userOrderedBooks, UserAllBooksWithFavJpaRepository userAllBooksWithFavJpaRepository, UserFavouriteBooksRepository userFavouriteBooksRepository) {
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
         this.userAllBooksWithFavRepository = userAllBooksWithFavRepository;
 
 
         this.userOrderedBooks = userOrderedBooks;
+
 
         this.userFavouriteBooksRepository = userFavouriteBooksRepository;
     }
@@ -254,9 +257,11 @@ public class UserServiceImpl implements UserService {
         }
 
 
+
         this.userAllBooksWithFavRepository.save(userAllBooksWithFav);
         this.userFavouriteBooksRepository.deleteFavouriteBook(user,book);
     }
+
 
     @Override
     public List<Book> getAllFavouriteBooksUser(Long id) {

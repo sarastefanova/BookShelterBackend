@@ -27,6 +27,6 @@ public interface UserAllBooksWithFavJpaRepository extends JpaRepository<UserAllB
     @Query("select u from UserAllBooksWithFav u where u.book like :book and u.user like :user")
     List<UserAllBooksWithFav> searchBookOrAuthor(Book book,User user);
 
-    @Query("select u.user from UserAllBooksWithFav u")
+    @Query("select distinct u.user from UserAllBooksWithFav u")
     List<User> listAllUserFavBooks();
 }

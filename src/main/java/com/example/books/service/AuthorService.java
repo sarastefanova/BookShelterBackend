@@ -12,7 +12,7 @@ public interface AuthorService {
 
 
     Optional<Author> getById(String nameAndSurname);
-
+    List<Author> listAuthors();
     Author createAuthorImg(String nameAndSurname, String shortAuthorBiography,byte[]file) throws AuthorAlreadyExists;
 
     void deleteAuthorWithFlag(String nameAndSurname,int isDeleted);

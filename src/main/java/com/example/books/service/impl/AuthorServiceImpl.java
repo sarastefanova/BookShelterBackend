@@ -27,6 +27,12 @@ public class AuthorServiceImpl implements AuthorService {
         return this.authorRepository.findById(nameAndSurname);
     }
 
+    @Override
+    public List<Author> listAuthors() {
+        return this.authorRepository.getAllAuthorsFlag();
+    }
+
+
 
     @Override
     public Author createAuthorImg(String nameAndSurname, String shortAuthorBiography, byte[] file)  {

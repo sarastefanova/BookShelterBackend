@@ -2,6 +2,7 @@ package com.example.books.repository.jpa;
 
 import com.example.books.model.*;
 import com.example.books.model.exceptions.InvalidBookId;
+import com.example.books.model.exceptions.InvalidFavouriteBookId;
 import com.example.books.model.exceptions.InvalidUserId;
 import com.example.books.model.paginate.Page;
 import com.example.books.repository.BookRepository;
@@ -20,11 +21,13 @@ public class BookRepositoryImpl implements BookRepository {
     private final BookJpaRepository bookJpaRepository;
     private final UserAllBooksWithFavRepository userAllBooksWithFavRepository;
     private final UserRepository userRepository;
+    private final UserAllBooksWithFavJpaRepository userAllBooksWithFavJpaRepository;
 
-    public BookRepositoryImpl(BookJpaRepository bookJpaRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserRepository userRepository) {
+    public BookRepositoryImpl(BookJpaRepository bookJpaRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserRepository userRepository, UserAllBooksWithFavJpaRepository userAllBooksWithFavJpaRepository) {
         this.bookJpaRepository = bookJpaRepository;
         this.userAllBooksWithFavRepository = userAllBooksWithFavRepository;
         this.userRepository = userRepository;
+        this.userAllBooksWithFavJpaRepository = userAllBooksWithFavJpaRepository;
     }
 
     @Override
@@ -40,10 +43,8 @@ public class BookRepositoryImpl implements BookRepository {
     @Override
     public Page<Book> getAllBooks(int page, int size) {
         org.springframework.data.domain.Page<Book> result=this.bookJpaRepository.findAll(PageRequest.of(page, size));
-        //Page<Book>newBook=this.bookJpaRepository.findAll(PageRequest.of(page,size)).map(item->)
+
         List<Book>newBooks=this.bookJpaRepository.findAllAuthors();
-        int totalPages=Math.round((float) newBooks.size()/size);
-        //return new  Page<>(page,newBooks.size(),size,newBooks);
 
         return  Page.slice(newBooks,page,size);
     }
@@ -57,8 +58,18 @@ public class BookRepositoryImpl implements BookRepository {
     public void deleteById(String name) {
          Book book=this.bookJpaRepository.findById(name).orElseThrow(InvalidBookId::new);
          book.setIsDeleted(1);
+        this.removeBookFromAllUsers(this.userAllBooksWithFavJpaRepository.listAllUserFavBooks(),book);
+
         //this.bookJpaRepository.deleteById(name);
         this.bookJpaRepository.save(book);
+    }
+
+    public void removeBookFromAllUsers(List<User> users, Book book){
+        for (User u:users) {
+            UserAllBooksWithFavKey userAllBooksWithFavKey=new UserAllBooksWithFavKey(u.getId(),book.getName());
+            UserAllBooksWithFav userAllBooksWithFav=this.userAllBooksWithFavJpaRepository.findById(userAllBooksWithFavKey).orElseThrow(InvalidFavouriteBookId::new);
+            this.userAllBooksWithFavJpaRepository.delete(userAllBooksWithFav);
+        }
     }
 
     @Override

@@ -28,6 +28,10 @@ public class RestAuthorController {
 
 
 
+    @GetMapping
+    public List<Author> getAllAuthors(){
+        return this.authorService.listAuthors();
+    }
 
 
     @PostMapping(path = "/addAuthor")

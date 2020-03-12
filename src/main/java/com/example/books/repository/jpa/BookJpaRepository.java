@@ -14,7 +14,7 @@ public interface BookJpaRepository extends JpaRepository<Book,String> {
     @Query("select b from Book b where b.name like :name")
     Book checkIfBookExists(String name);
 
-    @Query("select b from Book b where b.author.nameAndSurname like :nameAndSurname")
+    @Query("select b from Book b where b.author.nameAndSurname like :nameAndSurname and b.isDeleted=0")
     List<Book> getAllBookByAuthor(String nameAndSurname);
 
     @Query("select b from Book b where b.name like %:name%")
@@ -35,7 +35,7 @@ public interface BookJpaRepository extends JpaRepository<Book,String> {
     @Query("select b from Book b where b.isDeleted=0")
     List<Book> findAllBooks();
 
-    @Query("select b from Book b order by b.createDateTime desc")
+    @Query("select b from Book b where b.isDeleted=0 order by b.createDateTime desc")
     List<Book> getNewestBooks();
 
 

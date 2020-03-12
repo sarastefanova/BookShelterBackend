@@ -17,7 +17,7 @@ public interface AuthorRepository {
 
     Long findAnotherSameAuthor(String userName);
 
-
+    List<Author> getAllAuthorsFlag();
 
     String getAuthorName(String nameAndSurname);
 
