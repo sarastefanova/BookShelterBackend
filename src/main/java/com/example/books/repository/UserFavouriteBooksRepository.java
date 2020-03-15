@@ -17,6 +17,7 @@ public interface UserFavouriteBooksRepository {
     int getStatusBookFavourite(User user,Book name);
     UserFavouriteBooks userFavouriteBookUpdate(UserFavouriteBooks userFavouriteBooks);
     void deleteFavouriteBook(User user, Book book);
+    List<User> getAllUsersFavouriteBooks();
 
     UserFavouriteBooks findFavBookUser(User user, Book book);
 }

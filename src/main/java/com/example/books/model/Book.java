@@ -31,6 +31,7 @@ public class Book {
     @Lob
     private byte[] file;
 
+    @Lob
     String shortContentBook;
 
     @CreationTimestamp

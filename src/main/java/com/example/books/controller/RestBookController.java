@@ -116,11 +116,13 @@ public class RestBookController {
 
 
 
-    @GetMapping(path = "/searchBookPage",params = "name")
-    public Page<UserAllBooksWithFav> searchBookPage(@RequestParam String name,@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
-                                             @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size){
+    @GetMapping(path = "/searchBookPage")
+    public Page<UserAllBooksWithFav> searchBookPage(@RequestParam(value = "name") String name,
+                                                    @RequestParam(value = "id", defaultValue = "3") Long id,
+                                                    @RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                                    @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size){
 
-        return bookService.searchBookPage(name,page,size);
+        return bookService.searchBookPage(name,page,size,id);
     }
 
 

@@ -5,9 +5,7 @@ import com.example.books.model.exceptions.InvalidBookId;
 import com.example.books.model.exceptions.InvalidFavouriteBookId;
 import com.example.books.model.exceptions.InvalidUserId;
 import com.example.books.model.paginate.Page;
-import com.example.books.repository.BookRepository;
-import com.example.books.repository.UserAllBooksWithFavRepository;
-import com.example.books.repository.UserRepository;
+import com.example.books.repository.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
@@ -22,12 +20,16 @@ public class BookRepositoryImpl implements BookRepository {
     private final UserAllBooksWithFavRepository userAllBooksWithFavRepository;
     private final UserRepository userRepository;
     private final UserAllBooksWithFavJpaRepository userAllBooksWithFavJpaRepository;
+    private final UserFavouriteBooksRepository userFavouriteBooksRepository;
+    private final UserOrderedBooks userOrderedBooks;
 
-    public BookRepositoryImpl(BookJpaRepository bookJpaRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserRepository userRepository, UserAllBooksWithFavJpaRepository userAllBooksWithFavJpaRepository) {
+    public BookRepositoryImpl(BookJpaRepository bookJpaRepository, UserAllBooksWithFavRepository userAllBooksWithFavRepository, UserRepository userRepository, UserAllBooksWithFavJpaRepository userAllBooksWithFavJpaRepository, UserFavouriteBooksRepository userFavouriteBooksRepository, UserOrderedBooks userOrderedBooks) {
         this.bookJpaRepository = bookJpaRepository;
         this.userAllBooksWithFavRepository = userAllBooksWithFavRepository;
         this.userRepository = userRepository;
         this.userAllBooksWithFavJpaRepository = userAllBooksWithFavJpaRepository;
+        this.userFavouriteBooksRepository = userFavouriteBooksRepository;
+        this.userOrderedBooks = userOrderedBooks;
     }
 
     @Override
@@ -59,9 +61,26 @@ public class BookRepositoryImpl implements BookRepository {
          Book book=this.bookJpaRepository.findById(name).orElseThrow(InvalidBookId::new);
          book.setIsDeleted(1);
         this.removeBookFromAllUsers(this.userAllBooksWithFavJpaRepository.listAllUserFavBooks(),book);
+        this.removeBooksFromFavourite(this.userFavouriteBooksRepository.getAllUsersFavouriteBooks(),book);
 
-        //this.bookJpaRepository.deleteById(name);
+
         this.bookJpaRepository.save(book);
+    }
+
+    public void removeBooksFromFavourite(List<User> users, Book book){
+        for (User u:users) {
+           //UserFavouriteBooksKey userFavouriteBooksKey=new UserFavouriteBooksKey(u.getId(), book.getName());
+           UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepository.findFavBookUser(u, book);
+           if(userFavouriteBooks!=null){
+               this.userFavouriteBooksRepository.deleteFavouriteBook(u, book);
+               userOrdered userOrderedBooks=this.userOrderedBooks.findUserOrder(u, book);
+
+               if(userOrderedBooks!=null){
+                   this.userOrderedBooks.deleteOrder(u, book);
+               }
+           }
+
+        }
     }
 
     public void removeBookFromAllUsers(List<User> users, Book book){

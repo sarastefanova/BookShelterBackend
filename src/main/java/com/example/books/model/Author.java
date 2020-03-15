@@ -15,6 +15,7 @@ public class Author {
     @Id
     String nameAndSurname;
 
+    @Lob
     String shortAuthorBiography;
 
     @Column(nullable = true)

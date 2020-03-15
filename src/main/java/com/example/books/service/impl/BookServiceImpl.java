@@ -60,6 +60,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteBook(String name) {
+        Book book=this.bookRepository.findById(name).orElseThrow(InvalidBookId::new);
+
         this.bookRepository.deleteById(name);
     }
 
@@ -119,9 +121,10 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Page<UserAllBooksWithFav> searchBookPage(String name,int page, int pageSize) {
+    public Page<UserAllBooksWithFav> searchBookPage(String name,int page, int pageSize, Long id) {
         Book books=this.bookRepository.searchBookOrAuthor(name).get(0);
-        User user=this.userRepository.findByUserName("stefanovaAdmin");
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+       // User user=this.userRepository.findByUserName("stefanovaAdmin");
         List<UserAllBooksWithFav> userAllBooksWithFavs=new ArrayList<>();
         userAllBooksWithFavs=this.userAllBooksWithFavRepository.searchBookOrAuthor(books,user);
 //        List<UserAllBooksWithFav>getOneBookUserAll=new ArrayList<>();

@@ -69,6 +69,12 @@ public class UserFavouriteBooksRepositoryImpl  implements UserFavouriteBooksRepo
     }
 
     @Override
+    public List<User> getAllUsersFavouriteBooks() {
+        List<User>bla=this.userFavouriteBooksRepositoryJpa.getAllUsersFavouriteBooks();
+        return this.userFavouriteBooksRepositoryJpa.getAllUsersFavouriteBooks();
+    }
+
+    @Override
     public UserFavouriteBooks findFavBookUser(User user, Book book) {
         return this.userFavouriteBooksRepositoryJpa.findFavBookUser(user,book);
     }
