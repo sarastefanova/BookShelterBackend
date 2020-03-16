@@ -66,6 +66,13 @@ public class RestUserController {
         return this.userService.getAllFavouriteBooksUserPaginate(page,size,id);
     }
 
+    @GetMapping(path = "/getFavouriteBooksUserPaginate/{id}")//ovaa kje go koristeme za proba sega da vrakjame za allfavs books lista od gav books a ne samo books
+    public Page<UserFavouriteBooks> getFavouriteBooksUserPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+                                                       @RequestHeader(name = "page-size", defaultValue = "10", required = false)int size,
+                                                       @PathVariable(value = "id")Long id){
+        return this.userService.getFavouriteBooksUserPaginate(page,size,id);
+    }
+
     @GetMapping(path = "/getStatusBookOrdered/{id}/{name}")
     public int getStatusBookOrdered(@PathVariable(value = "id")Long id,@PathVariable(value = "name")String name){
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);

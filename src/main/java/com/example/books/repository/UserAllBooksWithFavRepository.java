@@ -3,6 +3,7 @@ package com.example.books.repository;
 import com.example.books.model.Book;
 import com.example.books.model.User;
 import com.example.books.model.UserAllBooksWithFav;
+import com.example.books.model.UserFavouriteBooks;
 import com.example.books.model.paginate.Page;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public interface UserAllBooksWithFavRepository {
     User findUser(User user);
 
     List<UserAllBooksWithFav> searchBookOrAuthor(Book book,User user);
+
 
     void saveBookForEachUser(Book book);
 }

@@ -17,6 +17,9 @@ public interface UserFavouriteBooksRepositoryJpa extends JpaRepository<UserFavou
     @Query("select b.book from UserFavouriteBooks b where b.user like :user")
     List<Book> getBooksFavouriteByUser(User user);
 
+    @Query("select b from UserFavouriteBooks b where b.user like :user")
+    List<UserFavouriteBooks> listFavoriteBooksUser(User user);
+
     @Query("select b.isOrdered from UserFavouriteBooks b where b.book like :name and b.user like :user")
     int getStatusBookFavourite(User user,Book name);
 

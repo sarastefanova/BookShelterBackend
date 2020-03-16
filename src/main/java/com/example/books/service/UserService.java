@@ -67,4 +67,6 @@ public interface UserService extends UserDetailsService {
     Page<Book> allOrderedBooksStatus(int page, int size, Long id);
 
     Page<Book> getAllFavouriteBooksUserPaginate(int page, int size,Long id);
+
+    Page<UserFavouriteBooks> getFavouriteBooksUserPaginate(int page, int size, Long id);
 }

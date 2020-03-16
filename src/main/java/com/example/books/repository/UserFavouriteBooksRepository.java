@@ -18,6 +18,6 @@ public interface UserFavouriteBooksRepository {
     UserFavouriteBooks userFavouriteBookUpdate(UserFavouriteBooks userFavouriteBooks);
     void deleteFavouriteBook(User user, Book book);
     List<User> getAllUsersFavouriteBooks();
-
+    List<UserFavouriteBooks> listFavoriteBooksUser(User user);
     UserFavouriteBooks findFavBookUser(User user, Book book);
 }

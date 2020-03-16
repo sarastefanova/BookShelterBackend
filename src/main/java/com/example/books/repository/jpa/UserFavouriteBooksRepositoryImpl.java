@@ -43,6 +43,8 @@ public class UserFavouriteBooksRepositoryImpl  implements UserFavouriteBooksRepo
         return this.userFavouriteBooksRepositoryJpa.getBooksFavouriteByUser(user);
     }
 
+
+
     @Override
     public Optional<UserFavouriteBooks> findById(UserFavouriteBooksKey userFavouriteBooksKey) {
         return this.userFavouriteBooksRepositoryJpa.findById(userFavouriteBooksKey);
@@ -72,6 +74,11 @@ public class UserFavouriteBooksRepositoryImpl  implements UserFavouriteBooksRepo
     public List<User> getAllUsersFavouriteBooks() {
         List<User>bla=this.userFavouriteBooksRepositoryJpa.getAllUsersFavouriteBooks();
         return this.userFavouriteBooksRepositoryJpa.getAllUsersFavouriteBooks();
+    }
+
+    @Override
+    public List<UserFavouriteBooks> listFavoriteBooksUser(User user) {
+        return this.userFavouriteBooksRepositoryJpa.listFavoriteBooksUser(user);
     }
 
     @Override

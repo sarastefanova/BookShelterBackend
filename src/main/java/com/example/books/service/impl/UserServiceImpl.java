@@ -58,15 +58,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
-//    @Override
-//    public User createUser(String userName,String name, String surname, String address, String number, String password, String passwordConfirm, String email,Roles roles) {
-//
-//
-//        User user=new User(userName,name,surname,address,number,passwordEncoder.encode(password),passwordConfirm,email,roles);
-//        return this.userRepository.save(user);
-//    }
-
     @Override
     public void deleteUser(Long id) {
         this.userRepository.deleteById(id);
@@ -324,6 +315,14 @@ public class UserServiceImpl implements UserService {
     public Page<Book> getAllFavouriteBooksUserPaginate(int page, int size, Long id) {
         User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
         List<Book>userFavouriteList=this.userFavouriteBooksRepository.getAllBooksFavouriteByUser(user);
+
+        return Page.slice(userFavouriteList,page,size);
+    }
+
+    @Override
+    public Page<UserFavouriteBooks> getFavouriteBooksUserPaginate(int page, int size, Long id) {
+        User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
+        List<UserFavouriteBooks>userFavouriteList=this.userFavouriteBooksRepository.listFavoriteBooksUser(user);
 
         return Page.slice(userFavouriteList,page,size);
     }
