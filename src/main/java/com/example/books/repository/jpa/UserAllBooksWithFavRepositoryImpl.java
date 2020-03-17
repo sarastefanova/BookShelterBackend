@@ -8,6 +8,7 @@ import com.example.books.model.paginate.Page;
 import com.example.books.repository.UserAllBooksWithFavRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,8 +80,13 @@ public class UserAllBooksWithFavRepositoryImpl implements UserAllBooksWithFavRep
     }
 
     @Override
-    public List<UserAllBooksWithFav> searchBookOrAuthor(Book book,User user) {
-        return this.userAllBooksWithFavJpaRepository.searchBookOrAuthor(book,user);
+    public List<UserAllBooksWithFav> searchBookOrAuthor(List<Book> books, User user) {
+        List<UserAllBooksWithFav>allBooksWithFavs=new ArrayList<>();
+        for (Book b : books) {
+            UserAllBooksWithFav userAllBooksWithFav=this.userAllBooksWithFavJpaRepository.searchBookOrAuthor2(b,user);
+            allBooksWithFavs.add(userAllBooksWithFav);
+        }
+        return  allBooksWithFavs;
     }
 
     @Override

@@ -122,13 +122,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<UserAllBooksWithFav> searchBookPage(String name,int page, int pageSize, Long id) {
-        Book books=this.bookRepository.searchBookOrAuthor(name).get(0);
+        //Book books=this.bookRepository.searchBookOrAuthor(name).get(0);
+        List<Book>books=this.bookRepository.searchBookOrAuthor(name);
         User user=this.userRepository.findById(id).orElseThrow(InvalidUserId::new);
-       // User user=this.userRepository.findByUserName("stefanovaAdmin");
-        List<UserAllBooksWithFav> userAllBooksWithFavs=new ArrayList<>();
-        userAllBooksWithFavs=this.userAllBooksWithFavRepository.searchBookOrAuthor(books,user);
-//        List<UserAllBooksWithFav>getOneBookUserAll=new ArrayList<>();
-//        getOneBookUserAll.add(userAllBooksWithFavs.get(0));
+
+        List<UserAllBooksWithFav> userAllBooksWithFavs=this.userAllBooksWithFavRepository.searchBookOrAuthor(books,user);
+
+
         int i=0;
         return Page.slice(userAllBooksWithFavs,page,pageSize);
     }

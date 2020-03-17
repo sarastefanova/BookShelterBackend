@@ -16,8 +16,8 @@ public interface BookJpaRepository extends JpaRepository<Book,String> {
 
     @Query("select b from Book b where b.author.nameAndSurname like :nameAndSurname and b.isDeleted=0")
     List<Book> getAllBookByAuthor(String nameAndSurname);
-
-    @Query("select b from Book b where b.name like %:name%")
+    //select b from Book b where b.name like :name or b.author.nameAndSurname like :name
+    @Query("select b from Book b where b.name like %:name% or b.author.nameAndSurname like %:name%")
     List<Book> findByName(String name);
 
     @Query("select count(b.name) from Book b where b.name like :userName group by b.name")
