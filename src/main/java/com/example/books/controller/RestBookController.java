@@ -29,10 +29,7 @@ public class RestBookController {
         this.userService = userService;
     }
 
-
-
-//    @PreAuthorize("hasRole('admin')")
-    @PostMapping(path = "/upload")
+    @PostMapping(path = "/uploadBook")
     @ResponseStatus(HttpStatus.CREATED)
     public Book createBookImg(@RequestParam(value="name") String name,
                            @RequestParam(value="nameAndSurname") String nameAndSurname,
@@ -40,27 +37,15 @@ public class RestBookController {
                            @RequestParam(value = "file",required = false)MultipartFile file,
                               @RequestParam(value = "shortContentBook")String shortContentBook,
                               @RequestParam(value = "availability")int availability) throws InvalidAuthorsName, IOException {
-
-
         int priceBook=Integer.parseInt(price);
-
-                return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes(),shortContentBook,availability);
+        return this.bookService.createBookWithImg(name,nameAndSurname,priceBook,file.getBytes(),shortContentBook,availability);
     }
-
-
-
 
     @GetMapping
     public Page<Book> getAllBooks(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
                                               @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size,
                                   @RequestParam(value = "id",required = false,defaultValue = "null")Long id) {
         return this.bookService.getAllBooks(page, size,id);
-    }
-
-    @GetMapping(path = "/getAllBooks")
-    public List<Book> getAllBooksAuthor(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
-                                  @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size) {
-        return this.bookService.getAllBooksAuthor();
     }
 
     @GetMapping(path = "/getAllBooksUser")
@@ -70,15 +55,6 @@ public class RestBookController {
         return this.bookService.getAllBooksUserWithFav(page,size,id);
     }
 
-    @GetMapping(path = "/getInFavouritesBook/{id}/{name}")
-    public int getInFavouritesBook(@PathVariable(value = "id")Long id,@PathVariable(value = "name")String name){
-        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
-        int i=this.bookService.getInFavouritesBook(user,book);
-        return this.bookService.getInFavouritesBook(user,book);
-    }
-
-   // @PreAuthorize("hasRole('admin')")
     @PatchMapping("/{name}")
     public Book updateBook(
                            @PathVariable(value="name") String name,
@@ -89,24 +65,14 @@ public class RestBookController {
         return this.bookService.editBook(name,nameAndSurname,price,shortContentBook,availability);
     }
 
-
     @DeleteMapping("/{name}")
     public void deleteBook(@PathVariable String name){
-
         this.bookService.deleteBook(name);
     }
-
 
     @GetMapping(path = "/getNewestBooks")
     public List<Book>getNewestBooks(){
         return this.bookService.getNewestBooks();
-    }
-
-    @GetMapping("/checkIfUserHasThisBookFav/{id}/{name}")
-    public boolean checkIfUserHasThisBookFav( @PathVariable(value = "id")Long id,
-                                       @PathVariable(value = "name")String name){
-
-        return this.bookService.checkIfUserHasThisBookFav(id,name);
     }
 
     @GetMapping(params = "name")
@@ -114,17 +80,13 @@ public class RestBookController {
         return bookService.getById(name);
     }
 
-
-
     @GetMapping(path = "/searchBookPage")
     public Page<UserAllBooksWithFav> searchBookPage(@RequestParam(value = "name") String name,
                                                     @RequestParam(value = "id", defaultValue = "3") Long id,
                                                     @RequestHeader(name = "page", defaultValue = "0", required = false) int page,
                                                     @RequestHeader(name = "page-size", defaultValue = "6", required = false) int size){
-
         return bookService.searchBookPage(name,page,size,id);
     }
-
 
     @GetMapping(path = "/getAllBooksByAuthor/{nameAndSurname}")
     public List<Book>getAllBookByAuthor(@PathVariable String nameAndSurname){

@@ -31,20 +31,6 @@ public class UserFavouriteBooksRepositoryImpl  implements UserFavouriteBooksRepo
         throw new InvalidFavouriteBookId();
     }
 
-
-
-    @Override
-    public List<Book> getAllFavouriteBooks() {
-        return this.userFavouriteBooksRepositoryJpa.getAllBooksFavourite();
-    }
-
-    @Override
-    public List<Book> getAllBooksFavouriteByUser(User user) {
-        return this.userFavouriteBooksRepositoryJpa.getBooksFavouriteByUser(user);
-    }
-
-
-
     @Override
     public Optional<UserFavouriteBooks> findById(UserFavouriteBooksKey userFavouriteBooksKey) {
         return this.userFavouriteBooksRepositoryJpa.findById(userFavouriteBooksKey);

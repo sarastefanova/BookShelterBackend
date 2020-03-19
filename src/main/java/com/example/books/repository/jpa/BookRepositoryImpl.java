@@ -33,11 +33,6 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        return this.bookJpaRepository.findAll();
-    }
-
-    @Override
     public Optional<Book> findById(String name) {
         return this.bookJpaRepository.findById(name);
     }
@@ -62,14 +57,11 @@ public class BookRepositoryImpl implements BookRepository {
          book.setIsDeleted(1);
         this.removeBookFromAllUsers(this.userAllBooksWithFavJpaRepository.listAllUserFavBooks(),book);
         this.removeBooksFromFavourite(this.userFavouriteBooksRepository.getAllUsersFavouriteBooks(),book);
-
-
         this.bookJpaRepository.save(book);
     }
 
     public void removeBooksFromFavourite(List<User> users, Book book){
         for (User u:users) {
-           //UserFavouriteBooksKey userFavouriteBooksKey=new UserFavouriteBooksKey(u.getId(), book.getName());
            UserFavouriteBooks userFavouriteBooks=this.userFavouriteBooksRepository.findFavBookUser(u, book);
            if(userFavouriteBooks!=null){
                this.userFavouriteBooksRepository.deleteFavouriteBook(u, book);
@@ -79,7 +71,6 @@ public class BookRepositoryImpl implements BookRepository {
                    this.userOrderedBooks.deleteOrder(u, book);
                }
            }
-
         }
     }
 
@@ -96,8 +87,6 @@ public class BookRepositoryImpl implements BookRepository {
         return this.bookJpaRepository.getAllBookByAuthor(nameAndSurname);
     }
 
-
-
     @Override
     public List<Book> searchBookOrAuthor(String name) {
         return this.bookJpaRepository.findByName(name);
@@ -108,13 +97,6 @@ public class BookRepositoryImpl implements BookRepository {
         return this.bookJpaRepository.findAnotherSameUserName(userName);
     }
 
-    @Override
-    public List<Book> getAllBooksAuthor() {
-
-         List<Book> booksWithoutDeletedAuthors=this.bookJpaRepository.findAllAuthors();
-
-        return null;
-    }
 
     @Override
     public Author getAuthorByBook(String name) {
@@ -123,17 +105,13 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public Page<UserFavouriteBooks> getAllBooksAuthorFavourite(int page,int size,User user) {
-
         List<UserFavouriteBooks>getBooks=this.bookJpaRepository.getAllBooksAuthorFavourite(user);
-        int i=0;
         return Page.slice(getBooks,page,size);
     }
 
     @Override
     public Page<UserAllBooksWithFav> getAllBooksUserWithFav(int page, int size, Long id) {
-       // List<Book>newBooks=this.bookJpaRepository.findAllAuthors();//tuka gi imam site knigi
-
-        List<UserAllBooksWithFav>userAllBooksWithFavs=new ArrayList<>();
+              List<UserAllBooksWithFav>userAllBooksWithFavs=new ArrayList<>();
         if(id==0){
             User user =this.userAllBooksWithFavRepository.getAllBooks().get(0).getUser();
             userAllBooksWithFavs=this.userAllBooksWithFavRepository.getAllBooksWithFavUser(user);

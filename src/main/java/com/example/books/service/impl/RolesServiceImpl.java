@@ -22,11 +22,6 @@ public class RolesServiceImpl implements RolesService {
     }
 
     @Override
-    public void deleteRoles(Long id) {
-        this.repository.deleteById(id);
-    }
-
-    @Override
     public Roles checkIfExcistRole(String roles) {
         return this.repository.checkIfExcistRole(roles);
     }

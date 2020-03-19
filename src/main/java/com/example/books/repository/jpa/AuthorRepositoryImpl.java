@@ -19,25 +19,18 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author save(Author author) {
-
         return this.authorJpaRepository.save(author);
     }
-
-
 
     @Override
     public Optional<Author> findById(String nameAndSurname) {
         return this.authorJpaRepository.findById(nameAndSurname);
     }
 
-
-
     @Override
     public List<String> getAllNamesOfAuthors() {
         return this.authorJpaRepository.getAllNamesOfAuthors();
     }
-
-
 
     @Override
     public Long findAnotherSameAuthor(String userName) {
@@ -49,7 +42,6 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         return this.authorJpaRepository.getAllAuthorsFlag();
     }
 
-
     @Override
     public String getAuthorName(String nameAndSurname) {
         return this.authorJpaRepository.getAuthorsName(nameAndSurname);
@@ -58,11 +50,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     @Override
     public Page<Author> getAllAuthorsPaginate(int page, int size) {
         List<Author>newAuthors=this.authorJpaRepository.getAllAuthorsFlag();
-        int totalPages=Math.round((float) newAuthors.size()/size);
-        //return new  Page<>(page,newBooks.size(),size,newBooks);
-
         return  Page.slice(newAuthors,page,size);
     }
-
 
 }

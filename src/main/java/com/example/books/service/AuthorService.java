@@ -10,16 +10,12 @@ import java.util.Optional;
 
 public interface AuthorService {
 
-
     Optional<Author> getById(String nameAndSurname);
     List<Author> listAuthors();
-    Author createAuthorImg(String nameAndSurname, String shortAuthorBiography,byte[]file) throws AuthorAlreadyExists;
-
-    void deleteAuthorWithFlag(String nameAndSurname,int isDeleted);
+    Author createAuthor(String nameAndSurname, String shortAuthorBiography,byte[]file) throws AuthorAlreadyExists;
+    void deleteAuthor(String nameAndSurname,int isDeleted);
     List<String> listAllNamesOfAuthors();
     Author editAuthor(String nameAndSurname, String shortAuthorBiography) throws InvalidAuthorsId;
-
     String getAuthorName(Author author);
-
     Page<Author> getAllAuthorsPaginate(int page, int size);
 }

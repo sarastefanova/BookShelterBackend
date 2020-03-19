@@ -26,11 +26,6 @@ public class UserOrderedBooksRepositoryImpl implements UserOrderedBooks {
     }
 
     @Override
-    public List<Book> getAllOrders() {
-        return this.userOrderedBooksJpaRepository.getAllBooks();
-    }
-
-    @Override
     public List<Book> getAllBooksOrderedUser(User user) {
         return this.userOrderedBooksJpaRepository.getAllBooksOrderedUser(user);
     }
@@ -39,7 +34,6 @@ public class UserOrderedBooksRepositoryImpl implements UserOrderedBooks {
     public Optional<userOrdered> findById(userOrderedBooksKey userOrderedKey) {
         return this.userOrderedBooksJpaRepository.findById(userOrderedKey);
     }
-
 
     @Override
     public int getStatusBookOrdered(User user,Book name) {

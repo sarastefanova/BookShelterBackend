@@ -11,8 +11,6 @@ import java.util.Optional;
 public interface UserFavouriteBooksRepository {
 
     UserFavouriteBooks userFavouriteBookSave(UserFavouriteBooks userFavouriteBooks);
-    List<Book> getAllFavouriteBooks();
-    List<Book> getAllBooksFavouriteByUser(User user);
     Optional<UserFavouriteBooks> findById(UserFavouriteBooksKey userFavouriteBooksKey);
     int getStatusBookFavourite(User user,Book name);
     UserFavouriteBooks userFavouriteBookUpdate(UserFavouriteBooks userFavouriteBooks);

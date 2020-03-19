@@ -26,25 +26,18 @@ public class RestAuthorController {
         this.authorService = authorService;
     }
 
-
-
     @GetMapping
     public List<Author> getAllAuthors(){
         return this.authorService.listAuthors();
     }
-
 
     @PostMapping(path = "/addAuthor")
     @ResponseStatus(HttpStatus.CREATED)
     public Author createAuthor(@RequestParam(value="nameAndSurname") String nameAndSurname,
                                @RequestParam(value="shortAuthorBiography") String shortAuthorBiography,
                                @RequestParam(value = "file",required = false) MultipartFile file) throws IOException, AuthorAlreadyExists {
-
-
-            return this.authorService.createAuthorImg(nameAndSurname,shortAuthorBiography,file.getBytes());
-
+            return this.authorService.createAuthor(nameAndSurname,shortAuthorBiography,file.getBytes());
     }
-
 
     @PatchMapping("/{nameAndSurname}")
     public Author updateAuthor(@PathVariable String nameAndSurname,
@@ -52,18 +45,10 @@ public class RestAuthorController {
        return this.authorService.editAuthor(nameAndSurname,shortAuthorBiography);
     }
 
-
-
-    @DeleteMapping(path = "/deleteFlag/{nameAndSurname}")
+    @DeleteMapping(path = "/delete/{nameAndSurname}")
     public void deleteAuthor(@PathVariable String nameAndSurname,@RequestParam(value = "isDeleted") int isDeleted){
-        this.authorService.deleteAuthorWithFlag(nameAndSurname,isDeleted);
+        this.authorService.deleteAuthor(nameAndSurname,isDeleted);
     }
-
-
-
-
-
-
 
     @GetMapping(path = "/allAuthorsPaginate")
     public Page<Author> getAllAuthors(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
@@ -71,12 +56,10 @@ public class RestAuthorController {
         return this.authorService.getAllAuthorsPaginate(page, size);
     }
 
-
     @GetMapping(params = "nameAndSurname")
     public Optional<Author> searchByName(@RequestParam String nameAndSurname){
         return authorService.getById(nameAndSurname);
     }
-
 
     @GetMapping("/getAuthorName")
     public String getAuthorsName(@RequestBody Author author){

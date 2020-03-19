@@ -32,23 +32,8 @@ public class UserAllBooksWithFavRepositoryImpl implements UserAllBooksWithFavRep
     }
 
     @Override
-    public Page<UserAllBooksWithFav> getAllBooks(int page, int size) {
-        return null;
-    }
-
-    @Override
     public UserAllBooksWithFav save(UserAllBooksWithFav UserAllBooksWithFav) {
         return this.userAllBooksWithFavJpaRepository.save(UserAllBooksWithFav);
-    }
-
-    @Override
-    public void deleteById(User user, Book book) {
-
-    }
-
-    @Override
-    public List<UserAllBooksWithFav>  saveAll(List<UserAllBooksWithFav> UserAllBooksWithFav) {
-            return this.userAllBooksWithFavJpaRepository.saveAll(UserAllBooksWithFav);
     }
 
     @Override
@@ -67,11 +52,6 @@ public class UserAllBooksWithFavRepositoryImpl implements UserAllBooksWithFavRep
     public List<UserAllBooksWithFav> getAllBooksWithFavUser(User user) {
 
         return this.userAllBooksWithFavJpaRepository.getAllBooksWithFavUser(user);
-    }
-
-    @Override
-    public int getInFavouritesBook(User user, Book book) {
-        return this.userAllBooksWithFavJpaRepository.getInFavouritesBook(user,book);
     }
 
     @Override

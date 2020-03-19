@@ -12,8 +12,6 @@ import java.util.List;
 
 public interface UserOrderedBooksJpaRepository extends JpaRepository<userOrdered, userOrderedBooksKey> {
 
-    @Query("select distinct u.book from userOrdered u")
-    List<Book> getAllBooks();
 
     @Query("select distinct u.book from userOrdered u where u.user like :user")
     List<Book> getAllBooksOrderedUser(User user);
@@ -23,7 +21,6 @@ public interface UserOrderedBooksJpaRepository extends JpaRepository<userOrdered
 
     @Query("select  u.user from userOrdered u where u.book like :book and u.user like :user")
     User getUserByBook(User user,Book book);
-
 
     @Query("select distinct u from userOrdered u where u.book like :book and u.user like :user")
     userOrdered findUserOrder(User user, Book book);

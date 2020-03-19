@@ -20,8 +20,6 @@ public class AuthorServiceImpl implements AuthorService {
         this.authorRepository = authorRepository;
     }
 
-
-
     @Override
     public Optional<Author> getById(String nameAndSurname) {
         return this.authorRepository.findById(nameAndSurname);
@@ -32,10 +30,8 @@ public class AuthorServiceImpl implements AuthorService {
         return this.authorRepository.getAllAuthorsFlag();
     }
 
-
-
     @Override
-    public Author createAuthorImg(String nameAndSurname, String shortAuthorBiography, byte[] file)  {
+    public Author createAuthor(String nameAndSurname, String shortAuthorBiography, byte[] file)  {
         if((this.authorRepository.findAnotherSameAuthor(nameAndSurname))==null) {
             int isDeleted=0;
             Author author = new Author(nameAndSurname, shortAuthorBiography, file,isDeleted);
@@ -44,10 +40,8 @@ public class AuthorServiceImpl implements AuthorService {
         else throw new InvalidAuthorsId();
     }
 
-
-
     @Override
-    public void deleteAuthorWithFlag(String nameAndSurname,int isDeleted) {
+    public void deleteAuthor(String nameAndSurname,int isDeleted) {
         Author newAuthor=this.authorRepository.findById(nameAndSurname).orElseThrow(InvalidAuthorsId::new);
             newAuthor.setIsDeleted(isDeleted);
             this.authorRepository.save(newAuthor);

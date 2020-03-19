@@ -37,33 +37,9 @@ public class RestUserController {
         this.bookService = bookService;
     }
 
-
-
     @GetMapping(params = "id")
     public Optional<User> searchById(@RequestParam Long id){
                 return userService.findById(id);
-    }
-
-
-
-
-
-    @GetMapping(path = "/allOrderedBooksStatus/{id}")
-    public List<Book> allBooksOrderedStatus(@PathVariable(value = "id")Long id){
-        return this.userService.allBooksOrderedStatus(id);
-    }
-
-    @GetMapping(path = "/getAllFavouriteBooksUser/{id}")
-    public List<Book> getAllFavouriteBooksUser(@PathVariable(value = "id")Long id){
-        return this.userService.getAllFavouriteBooksUser(id);
-    }
-
-
-    @GetMapping(path = "/getAllFavouriteBooksUserPaginate/{id}")
-    public Page<Book> getAllFavouriteBooksUserPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
-                                                       @RequestHeader(name = "page-size", defaultValue = "10", required = false)int size,
-                                                               @PathVariable(value = "id")Long id){
-        return this.userService.getAllFavouriteBooksUserPaginate(page,size,id);
     }
 
     @GetMapping(path = "/getFavouriteBooksUserPaginate/{id}")//ovaa kje go koristeme za proba sega da vrakjame za allfavs books lista od gav books a ne samo books
@@ -89,57 +65,26 @@ public class RestUserController {
     }
 
 
-
-
-    @GetMapping(path = "/getAllRequestsOrdersStatus")//kje go koristeme ovaa veke za status plus da imame na narackata
-    public List<Book> getAllRequestsOrdersStatus(){
-
-        return this.userService.getAllRequestsOrdersStatus();
-    }
-
-    @GetMapping(path = "/getAllRequests")//
-    public List<userOrdered> getAllRequests(){
-
-        return this.userService.getAllRequests();
-    }
-
-
-    @GetMapping(path = "/getAllRequestsPaginate")//
+    @GetMapping(path = "/getAllRequestsPaginate")
     public Page<userOrdered> getAllRequestsPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
                                                     @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size){
 
         return this.userService.getAllRequestsPaginate(page,size);
     }
 
-
-    @GetMapping(path = "/allOrderedBooksStatusPaginate/{id}")//
-    public Page<Book> allOrderedBooksStatusPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
+    @GetMapping(path = "/allOrderedBooksPaginate/{id}")
+    public Page<Book> allOrderedBooksPaginate(@RequestHeader(name = "page", defaultValue = "0", required = false) int page,
                                                     @RequestHeader(name = "page-size", defaultValue = "10", required = false) int size,
                                                            @PathVariable(value = "id")Long id){
 
-        return this.userService.allOrderedBooksStatus(page,size,id);
-    }
-
-    @DeleteMapping(path = "/deleteFavBookUser/{id}",params = "name")
-    public void deleteFavBook(@PathVariable(value ="id")Long id,
-                              @RequestParam(value = "name")String name){
-        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-        this.userService.deleteFavBook(id,book);
+        return this.userService.allOrderedBooks(page,size,id);
     }
 
     @DeleteMapping(path = "/deleteOrderedBookUser/{id}",params = "name")
-    public void deleteOrderedBook(@PathVariable(value ="id")Long id,
-                              @RequestParam(value = "name")String name){
-        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-        this.userService.deleteOrderedBook(id,book);
-    }
-
-
-    @DeleteMapping(path = "/deleteOrderedBookUserStatus/{id}",params = "name")
     public void deleteOrderedBookStatus(@PathVariable(value ="id")Long id,
                                   @RequestParam(value = "name")String name){
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-        this.userService.deleteOrderedBookStatus(id,book);
+        this.userService.deleteOrderedBook(id,book);
     }
 
     @DeleteMapping(path = "/deleteFavouriteBookUser/{id}",params = "name")
@@ -157,98 +102,31 @@ public class RestUserController {
             @RequestParam(value = "surname")String surname,
             @RequestParam(value = "address")String address,
             @RequestParam(value = "number")String number,
-            @RequestParam(value = "email")String email)  {
-
-
-            return (this.userService.editUser(id,userName,name,surname,address,number,email));
-    }
-
-    @PatchMapping("/editUser/{id}")
-    public User updateUser(
-            @PathVariable(value="id") Long id,
-            @RequestParam(value = "userName") String userName,
-            @RequestParam(value = "name")String name,
-            @RequestParam(value = "surname")String surname,
-            @RequestParam(value = "address")String address,
-            @RequestParam(value = "number")String number,
             @RequestParam(value = "email")String email,
             @RequestParam(value = "file",required = false) MultipartFile file) throws IOException {
 
         if(file==null){
             User user=this.userService.findById(id).get();
-            return (this.userService.editUserImg(id,userName,name,surname,address,number,email,user.getFile()));
+            return (this.userService.editUser(id,userName,name,surname,address,number,email,user.getFile()));
         }
-        return (this.userService.editUserImg(id,userName,name,surname,address,number,email,file.getBytes()));
+        return (this.userService.editUser(id,userName,name,surname,address,number,email,file.getBytes()));
     }
 
     @PatchMapping(path = "/addFavouriteBook/{id}/{name}")
-    public User user(@PathVariable(value="id") Long id,
-                     @PathVariable(value = "name")String name){
-        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
-//        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-//        List<Book>allBooksLiked=user.getLikedBooks();
-//
-//        if(allBooksLiked.contains(book)){
-//            throw   new ListContainsBook();
-//        }
-//        allBooksLiked.add(book);
-//        user.setLikedBooks(allBooksLiked);
-
-
-
-        return this.userService.addFavouriteBook(user);
-    }
-
-    @PatchMapping(path = "/addFavouriteBookFlag/{id}/{name}")
     public UserFavouriteBooks userFavouriteBooks(@PathVariable(value="id") Long id,
                                    @PathVariable(value = "name")String name){
         User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-//        List<Book>allBooksLiked=user.getLikedBooks();
-//
-//        if(allBooksLiked.contains(book)){
-//            throw   new ListContainsBook();
-//        }
-//        allBooksLiked.add(book);
-//        user.setLikedBooks(allBooksLiked);
-
-
-
         return this.userService.addFavouriteBookForUser(user,book);
     }
 
 
     @PatchMapping(path = "/addOrderedBook/{id}/{name}")
-    public User addOrder(@PathVariable(value="id") Long id,
-                     @PathVariable(value = "name")String name){
-        User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
-//        Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-//        List<Book>allBooksOrdered=user.getOrderedBooks();
-//
-//        if(allBooksOrdered.contains(book)){
-//            throw   new ListContainsBook();
-//        }
-//        allBooksOrdered.add(book);
-//        user.setOrderedBooks(allBooksOrdered);
-
-        return this.userService.addFavouriteBook(user);
-    }
-
-
-    @PatchMapping(path = "/addOrderedBookWithStatus/{id}/{name}")
-    public userOrdered addOrderWithStatus(@PathVariable(value="id") Long id,
+    public userOrdered addOrderedBook(@PathVariable(value="id") Long id,
                                           @PathVariable(value = "name")String name){
         User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-//        List<Book>allBooksOrdered=user.getOrderedBooks();
-//
-//        if(allBooksOrdered.contains(book)){
-//            throw   new ListContainsBook();
-//        }
-//        allBooksOrdered.add(book);
-//        user.setOrderedBooks(allBooksOrdered);
-
-        return this.userService.addFavouriteBookStatus(user,book);
+        return this.userService.addOrderedBookUser(user,book);
     }
 
     @PatchMapping(path = "/approveOrder/{id}/{name}")
@@ -256,8 +134,6 @@ public class RestUserController {
                                          @PathVariable(value = "name")String name){
         User user=this.userService.findById(id).orElseThrow(InvalidUserId::new);
         Book book=this.bookService.getById(name).orElseThrow(InvalidBookId::new);
-
-
         return this.userService.approveOrder(user,book);
     }
 
@@ -282,9 +158,7 @@ public class RestUserController {
             //Status code 409
             return  new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        Roles role=new Roles();
-        role=rolesService.checkIfExcistRole("user");
-        int i=0;
+        Roles role=rolesService.checkIfExcistRole("user");
         user.setRoles(role);
         return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
     }
@@ -297,9 +171,6 @@ public class RestUserController {
             //This means; logout will be successful. login?logout
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        String username = principal.getName();
-        int i=0;
-
         return ResponseEntity.ok(userService.getByUserName(principal.getName()));
     }
 
