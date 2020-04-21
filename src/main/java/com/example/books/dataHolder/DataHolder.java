@@ -33,6 +33,12 @@ public class DataHolder {
     @PostConstruct
     public void init(){
         Roles role=new Roles();
+        role.setRole("admin");
+        roles.add(role);
+        role.setRole("user");
+        roles.add(role);
+        this.rolesRepository.saveAll(roles);
+
         User user=new User();
         user.setName("Sara");
         user.setSurname("Stefanova");
